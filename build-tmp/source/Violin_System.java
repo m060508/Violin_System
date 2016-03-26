@@ -14,14 +14,13 @@ import java.io.IOException;
 
 public class Violin_System extends PApplet {
 
-PImage all_score, part_score, left_grad, right_grad, img; //\u5168\u4f53\u697d\u8b5c, \u697d\u8b5c\u306e\u4e00\u90e8, \u5de6\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3, \u53f3\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3
+PImage all_score, part_score, left_grad, right_grad; //\u5168\u4f53\u697d\u8b5c, \u697d\u8b5c\u306e\u4e00\u90e8, \u5de6\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3, \u53f3\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3
 ScoreNote[][]note = new ScoreNote[4][8];//note[y\u8ef8\u5411\u304d\u306b\u6bb5\u6570][x\u8ef8\u5411\u304d\u306b\u97f3\u6570
 Color []color_rect = new Color[22];//\u8272\u309222\u8272\u3067\u7ba1\u7406
 Tab tab_true, tab_ambiguous, tab_false;
 
 public void setup() {
    // \u753b\u9762\u30b5\u30a4\u30ba\u3092\u6c7a\u5b9a
-
  all_score = loadImage("all_score.png"); //\u5168\u4f53\u697d\u8b5c\u3092\u7528\u610f
  part_score = loadImage("part_score.png"); //\u697d\u8b5c\u306e\u4e00\u90e8\u3092\u7528\u610f
  left_grad = loadImage("left_grad.png"); //\u5de6\u7528\u30b0\u30e9\u30c7\u3092\u7528\u610f
@@ -107,18 +106,23 @@ public void setup() {
 public void draw(){
  background(0);
  image(all_score, 800, 100, 1200, 741);//\u5168\u4f53\u697d\u8b5c\u3092\u914d\u7f6e
- image(part_score, 90, 50, 1141, 148);//\u79fb\u52d5\u3059\u308b\u697d\u8b5c\u3092\u914d\u7f6e
- //img = part_score.get(50,50,100,100);
- //image(img,0,0,100,100);
+ //image(part_score, 90, 50, 1141, 148);//\u697d\u8b5c\u306e\u4e00\u90e8
+ part_score = part_score.get(0,0,680,148);
+ image(part_score,90,50,680,148);
+ image(left_grad, 70, 40, 88, 178);
+ image(right_grad, 700, 40, 88, 178);
  tab_true.tab_rect();
  tab_true.tab_color();
  tab_true.tab_text();
+ tab_true.mousePressed();
  tab_ambiguous.tab_rect();
  tab_ambiguous.tab_color();
  tab_ambiguous.tab_text();
+ tab_ambiguous.mousePressed();
  tab_false.tab_rect();
  tab_false.tab_color();
  tab_false.tab_text();
+ tab_false.mousePressed();
 }
 
 public void mouseClicked() {
@@ -185,6 +189,7 @@ class ScoreNote {
 class Tab{
  private int x;
  private int y;
+ private int number=0;
 
  Tab(int x, int y){
  	this.x = x;
@@ -211,18 +216,34 @@ public int getY() {
   }
   public void tab_text(){ //\u305d\u308c\u305e\u308c\u306e\u30bf\u30d6\u306e\u30c6\u30ad\u30b9\u30c8\u90e8\u5206
   	fill(255);
-  	text(""+mouseX, 40,40, 40,40);
+  	text("mouseX:"+mouseX, 40,40, 90,60);
+  	text("mouseY:"+mouseY, 40,60, 90,60);
   	text("True Position Learning", 80, 955);
     text("Ambiguous Position Learning", 270, 955);
     text("false Position Learning", 480, 955);
+
+    if(number == 0){//tab_true\u304c\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3055\u308c\u305f\u6642
+  	fill(255);
+  	text("This mode teaches only true position.", 80, 1000);
   }
-  public void mouseClicked() {
-  if( ((x <= mouseX)&&(mouseX < x+200)) && ((y <= mouseY)&&(mouseY <= y+60)) )
-    {
-    fill(105, 105, 105);//\u30de\u30a6\u30b9\u304c\u30aa\u30f3\u3055\u308c\u305f\u5834\u5408\uff0c\u8272\u3092\u7070\u8272\u306b\u3059\u308b
-    rect(x, y, 200, 60); 
-    }
+  else if(number == 1){//tab_ambiguous\u304c\u3055\u308c\u305f\u6642	
+  	fill(255);
+  	text("This mode teaches true position and false position.", 80, 1000);
+  }
+  else if(number == 2){//tab_false\u304c\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af	\u3055\u308c\u305f\u6642	
+  	fill(255);
+  	text("This mode teaches only false position.", 80, 1000);
+  }
+  println("Number:"+number);
+  }
+  public void mousePressed() {
+  for(int i = 0; i < 3 ;i++){
+  	if((mousePressed)&&( (( 50+ 200*i <= mouseX)&&(mouseX < 50+200*i+200)) && ((920 <= mouseY)&&(mouseY <= 980)) ))
+  	number = i;
+  }
 }
+
+  
 }
   public void settings() {  fullScreen(P2D); }
   static public void main(String[] passedArgs) {

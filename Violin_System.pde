@@ -1,11 +1,10 @@
-PImage all_score, part_score, left_grad, right_grad, img; //全体楽譜, 楽譜の一部, 左用グラデーション, 右用グラデーション
+PImage all_score, part_score, left_grad, right_grad; //全体楽譜, 楽譜の一部, 左用グラデーション, 右用グラデーション
 ScoreNote[][]note = new ScoreNote[4][8];//note[y軸向きに段数][x軸向きに音数
 Color []color_rect = new Color[22];//色を22色で管理
 Tab tab_true, tab_ambiguous, tab_false;
 
 void setup() {
   fullScreen(P2D); // 画面サイズを決定
-
  all_score = loadImage("all_score.png"); //全体楽譜を用意
  part_score = loadImage("part_score.png"); //楽譜の一部を用意
  left_grad = loadImage("left_grad.png"); //左用グラデを用意
@@ -91,18 +90,23 @@ void setup() {
 void draw(){
  background(0);
  image(all_score, 800, 100, 1200, 741);//全体楽譜を配置
- image(part_score, 90, 50, 1141, 148);//移動する楽譜を配置
- //img = part_score.get(50,50,100,100);
- //image(img,0,0,100,100);
+ //image(part_score, 90, 50, 1141, 148);//楽譜の一部
+ part_score = part_score.get(0,0,680,148);
+ image(part_score,90,50,680,148);
+ image(left_grad, 70, 40, 88, 178);
+ image(right_grad, 700, 40, 88, 178);
  tab_true.tab_rect();
  tab_true.tab_color();
  tab_true.tab_text();
+ tab_true.mousePressed();
  tab_ambiguous.tab_rect();
  tab_ambiguous.tab_color();
  tab_ambiguous.tab_text();
+ tab_ambiguous.mousePressed();
  tab_false.tab_rect();
  tab_false.tab_color();
  tab_false.tab_text();
+ tab_false.mousePressed();
 }
 
 void mouseClicked() {

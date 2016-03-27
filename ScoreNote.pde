@@ -74,7 +74,7 @@ public void addNote(int n)
     noStroke();
     fill(186, 233, 255);
     textSize(25);
-    text("▼", x-20, y, 40, 40);
+    text("▼", x-20, 67+212*note_y, 40, 40);
     text("▼", 210, 38, 40, 40);
   }
 

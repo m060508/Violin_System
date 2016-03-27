@@ -5,16 +5,26 @@ import javax.sound.midi.ShortMessage;
 import processing.video.*;  //ビデオライブラリをインポート
 import processing.opengl.*;
 
+//画像用変数
 PImage all_score, part_score, left_grad, right_grad; //全体楽譜, 楽譜の一部, 左用グラデーション, 右用グラデーション
+
+//主に楽譜の音を管理する用
 ScoreNote[][]note = new ScoreNote[4][8];//note[y軸向きに段数][x軸向きに音数
+int note_y, note_x = 0;
+
+//色を管理するための配列
 Color []col = new Color[22];//色を22色で管理
+
+//タブを管理するための変数
 Tab tab_true, tab_ambiguous, tab_false;//タブ
 //NoCamera camera; //カメラがない際のカメラ
 
+//webカメラ用
 Capture video;  //Capture型の変数videoを宣言
 
+//midi用
 MidiBus myBus; //The MidiBus
-int pitchbend, notebus_different, note_y, note_x=0;//note_yは段落数、note_xで段落内の何番目を弾いているか管理
+int pitchbend, notebus_different=0;//note_yは段落数、note_xで段落内の何番目を弾いているか管理
 
 int channel = 0;
 int pitch = 64;
@@ -27,8 +37,10 @@ int second_byte = 80; // But with less velocity
 ArrayList<ScoreNote> played_note;//pitchbendで得たどの程度ずれているかを入れるための配列を用意
 
 void setup() {
+  //画面
  fullScreen(P2D); // 画面サイズを決定
 
+//midibus用
   MidiBus.list(); // List all available Midi devices on STDOUT. This will show each device's index and name.
   myBus = new MidiBus(this, 0, 0); // Create a new MidiBus object
 
@@ -149,7 +161,6 @@ void draw(){
  background(0);
 
  //カメラの調整と表示
- 
 video.read();
 
 //カメラ映像を回転させて、演奏者の見ているものと同じ映像にする
@@ -235,9 +246,12 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
   }
 }
 
+//webカメラを更新
 void captureEvent(Capture video) {
   video.read();
 }
+
+//マウスの位置を把握
 void mouseClicked() {
   println("x"+mouseX+" "+"y"+mouseY);
   return;

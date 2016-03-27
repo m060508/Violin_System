@@ -28,16 +28,26 @@ public class Violin_System extends PApplet {
   //\u30d3\u30c7\u30aa\u30e9\u30a4\u30d6\u30e9\u30ea\u3092\u30a4\u30f3\u30dd\u30fc\u30c8
 
 
+//\u753b\u50cf\u7528\u5909\u6570
 PImage all_score, part_score, left_grad, right_grad; //\u5168\u4f53\u697d\u8b5c, \u697d\u8b5c\u306e\u4e00\u90e8, \u5de6\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3, \u53f3\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3
+
+//\u4e3b\u306b\u697d\u8b5c\u306e\u97f3\u3092\u7ba1\u7406\u3059\u308b\u7528
 ScoreNote[][]note = new ScoreNote[4][8];//note[y\u8ef8\u5411\u304d\u306b\u6bb5\u6570][x\u8ef8\u5411\u304d\u306b\u97f3\u6570
+int note_y, note_x = 0;
+
+//\u8272\u3092\u7ba1\u7406\u3059\u308b\u305f\u3081\u306e\u914d\u5217
 Color []col = new Color[22];//\u8272\u309222\u8272\u3067\u7ba1\u7406
+
+//\u30bf\u30d6\u3092\u7ba1\u7406\u3059\u308b\u305f\u3081\u306e\u5909\u6570
 Tab tab_true, tab_ambiguous, tab_false;//\u30bf\u30d6
 //NoCamera camera; //\u30ab\u30e1\u30e9\u304c\u306a\u3044\u969b\u306e\u30ab\u30e1\u30e9
 
+//web\u30ab\u30e1\u30e9\u7528
 Capture video;  //Capture\u578b\u306e\u5909\u6570video\u3092\u5ba3\u8a00
 
+//midi\u7528
 MidiBus myBus; //The MidiBus
-int pitchbend, notebus_different, note_y, note_x=0;//note_y\u306f\u6bb5\u843d\u6570\u3001note_x\u3067\u6bb5\u843d\u5185\u306e\u4f55\u756a\u76ee\u3092\u5f3e\u3044\u3066\u3044\u308b\u304b\u7ba1\u7406
+int pitchbend, notebus_different=0;//note_y\u306f\u6bb5\u843d\u6570\u3001note_x\u3067\u6bb5\u843d\u5185\u306e\u4f55\u756a\u76ee\u3092\u5f3e\u3044\u3066\u3044\u308b\u304b\u7ba1\u7406
 
 int channel = 0;
 int pitch = 64;
@@ -50,8 +60,10 @@ int second_byte = 80; // But with less velocity
 ArrayList<ScoreNote> played_note;//pitchbend\u3067\u5f97\u305f\u3069\u306e\u7a0b\u5ea6\u305a\u308c\u3066\u3044\u308b\u304b\u3092\u5165\u308c\u308b\u305f\u3081\u306e\u914d\u5217\u3092\u7528\u610f
 
 public void setup() {
+  //\u753b\u9762
   // \u753b\u9762\u30b5\u30a4\u30ba\u3092\u6c7a\u5b9a
 
+//midibus\u7528
   MidiBus.list(); // List all available Midi devices on STDOUT. This will show each device's index and name.
   myBus = new MidiBus(this, 0, 0); // Create a new MidiBus object
 
@@ -172,7 +184,6 @@ public void draw(){
  background(0);
 
  //\u30ab\u30e1\u30e9\u306e\u8abf\u6574\u3068\u8868\u793a
- 
 video.read();
 
 //\u30ab\u30e1\u30e9\u6620\u50cf\u3092\u56de\u8ee2\u3055\u305b\u3066\u3001\u6f14\u594f\u8005\u306e\u898b\u3066\u3044\u308b\u3082\u306e\u3068\u540c\u3058\u6620\u50cf\u306b\u3059\u308b
@@ -258,9 +269,12 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
   }
 }
 
+//web\u30ab\u30e1\u30e9\u3092\u66f4\u65b0
 public void captureEvent(Capture video) {
   video.read();
 }
+
+//\u30de\u30a6\u30b9\u306e\u4f4d\u7f6e\u3092\u628a\u63e1
 public void mouseClicked() {
   println("x"+mouseX+" "+"y"+mouseY);
   return;
@@ -427,7 +441,7 @@ public void addNote(int n)
     noStroke();
     fill(186, 233, 255);
     textSize(25);
-    text("\u25bc", x-20, y, 40, 40);
+    text("\u25bc", x-20, 67+212*note_y, 40, 40);
     text("\u25bc", 210, 38, 40, 40);
   }
 

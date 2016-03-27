@@ -1,11 +1,42 @@
+import themidibus.*; //Import the library
+import javax.sound.midi.MidiMessage; //Import the MidiMessage classes http://java.sun.com/j2se/1.5.0/docs/api/javax/sound/midi/MidiMessage.html
+import javax.sound.midi.SysexMessage;
+import javax.sound.midi.ShortMessage;
+import processing.video.*;  //ビデオライブラリをインポート
+import processing.opengl.*;
+
 PImage all_score, part_score, left_grad, right_grad; //全体楽譜, 楽譜の一部, 左用グラデーション, 右用グラデーション
 ScoreNote[][]note = new ScoreNote[4][8];//note[y軸向きに段数][x軸向きに音数
-Color []color_rect = new Color[22];//色を22色で管理
+Color []col = new Color[22];//色を22色で管理
 Tab tab_true, tab_ambiguous, tab_false;//タブ
-NoCamera camera; //カメラがない際のカメラ
+//NoCamera camera; //カメラがない際のカメラ
+
+Capture video;  //Capture型の変数videoを宣言
+
+MidiBus myBus; //The MidiBus
+int pitchbend, notebus_different, note_y, note_x=0;//note_yは段落数、note_xで段落内の何番目を弾いているか管理
+
+int channel = 0;
+int pitch = 64;
+int velocity = 127;
+int status_byte = 0xA0; // For instance let us send aftertouch
+int channel_byte = 0; // On channel 0 again
+int first_byte = 64; // The same note;
+int second_byte = 80; // But with less velocity
+
+ArrayList<ScoreNote> played_note;//pitchbendで得たどの程度ずれているかを入れるための配列を用意
 
 void setup() {
  fullScreen(P2D); // 画面サイズを決定
+
+  MidiBus.list(); // List all available Midi devices on STDOUT. This will show each device's index and name.
+  myBus = new MidiBus(this, 0, 0); // Create a new MidiBus object
+
+ //カメラの準備
+  video = new Capture(this, 640, 540,"USB_Camera");  //カメラからのキャプチャーをおこなうための変数を設定
+  video.start();  //Processing ver.2.0以上はこのコードが必要
+
+//各画像を用意
  all_score = loadImage("all_score.png"); //全体楽譜を用意
  part_score = loadImage("part_score.png"); //楽譜の一部を用意
  left_grad = loadImage("left_grad.png"); //左用グラデを用意
@@ -58,40 +89,75 @@ void setup() {
   note[3][6] = new ScoreNote(1712, 142+212*3, G5);
   note[3][7] = new ScoreNote(1846, 136+212*3, A5);
 
-//color_rect[number] = new Color(R, G, B)
-  color_rect[0] = new Color(0, 0, 255);
-  color_rect[1] = new Color(38, 92, 170);
-  color_rect[2] = new Color(65, 131, 197);
-  color_rect[3] = new Color(112, 160, 214);
-  color_rect[4] = new Color(38, 187, 238);
-  color_rect[5] = new Color(131, 206, 237);
-  color_rect[6] = new Color(160, 213, 205);
-  color_rect[7] = new Color(82, 186, 155);
-  color_rect[8] = new Color(9, 127, 93);
-  color_rect[9] = new Color(29, 117, 57);
-  color_rect[10] = new Color(36, 155, 58);
+//col[number] = new Color(R, G, B)
+  col[0] = new Color(0, 0, 255);
+  col[1] = new Color(38, 92, 170);
+  col[2] = new Color(65, 131, 197);
+  col[3] = new Color(112, 160, 214);
+  col[4] = new Color(38, 187, 238);
+  col[5] = new Color(131, 206, 237);
+  col[6] = new Color(160, 213, 205);
+  col[7] = new Color(82, 186, 155);
+  col[8] = new Color(9, 127, 93);
+  col[9] = new Color(29, 117, 57);
+  col[10] = new Color(36, 155, 58);
 
-  color_rect[11] = new Color(87, 175, 79);
-  color_rect[12] = new Color(111, 189, 105);
-  color_rect[13] = new Color(211, 227, 142);
-  color_rect[14] = new Color(248, 229, 141);
-  color_rect[15] = new Color(245, 211, 60);
-  color_rect[16] = new Color(244, 161, 55);
-  color_rect[17] = new Color(243, 162, 134);
-  color_rect[18] = new Color(246, 189, 187);
-  color_rect[19] = new Color(238, 129, 127);
-  color_rect[20] = new Color(234, 93, 87);
-  color_rect[21] = new Color(255, 0, 0);
+  col[11] = new Color(87, 175, 79);
+  col[12] = new Color(111, 189, 105);
+  col[13] = new Color(211, 227, 142);
+  col[14] = new Color(248, 229, 141);
+  col[15] = new Color(245, 211, 60);
+  col[16] = new Color(244, 161, 55);
+  col[17] = new Color(243, 162, 134);
+  col[18] = new Color(246, 189, 187);
+  col[19] = new Color(238, 129, 127);
+  col[20] = new Color(234, 93, 87);
+  col[21] = new Color(255, 0, 0);
   
-  tab_true = new Tab(50, 920); //Tabの正確ver
-  tab_ambiguous = new Tab(250, 920); //Tabの曖昧ver
-  tab_false = new Tab(450, 920); //Tabの虚偽ver
+  tab_true = new Tab(50, 920);//Tabの正確ver
+  tab_ambiguous = new Tab(250, 920);//Tabの曖昧ver
+  tab_false = new Tab(450, 920);//Tabの虚偽ver
 
-  camera = new NoCamera(170, 300);
+ // camera = new NoCamera(170, 300);
+ 
+ //midibusを管理
+ myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
+  myBus.sendNoteOff(channel, pitch, velocity); // Send a Midi nodeOff
+  myBus.sendMessage(status_byte, channel_byte, first_byte, second_byte);
+  myBus.sendMessage(
+    new byte[] {
+    (byte)0xF0, (byte)0x1, (byte)0x2, (byte)0x3, (byte)0x4, (byte)0xF7
+    }
+    );
+  try { 
+    SysexMessage message = new SysexMessage();
+    message.setMessage(
+      0xF0, 
+      new byte[] {
+      (byte)0x5, (byte)0x6, (byte)0x7, (byte)0x8, (byte)0xF7
+      }, 
+      5
+      );
+    myBus.sendMessage(message);
+  } 
+  catch(Exception e) {
+  }
+
 }
 
 void draw(){
  background(0);
+
+ //カメラの調整と表示
+ 
+video.read();
+
+//カメラ映像を回転させて、演奏者の見ているものと同じ映像にする
+  pushMatrix(); 
+  translate(100, 900);
+  rotate(radians(-90));
+  image(video, 10, 10, 640, 540);
+  popMatrix();
 
 //楽譜の表示
  image(all_score, 800, 100, 1200, 741);//全体楽譜を配置
@@ -101,7 +167,27 @@ void draw(){
  image(left_grad, 70, 40, 88, 178); //グラデーション左を配置
  image(right_grad, 700, 40, 88, 178);//グラデーション右を配置
 
- //Tabの動きを管理
+//楽譜の水色▼を表示
+note[note_y][note_x].blue_triangle(); 
+
+//ずれ別の色の見本を表示
+  for (int i = 0; i < col.length; i++) {
+    col[i].color_rect();
+    rect(1000+i*30, 20, 20, 20);
+  }
+  fill(255);
+  textSize(20);
+  text("low tone", 900, 20, 100, 40);
+  text("high tone", 1670, 20, 100, 40);
+
+//その場で弾いた音のずれを表示
+if (note[note_y][note_x].played_note.size()>0) {
+    col[note[note_y][note_x].getNote(note[note_y][note_x].played_note.size()-1)].color_rect();
+    rect(200, 160, 30, 30);
+  }
+
+
+//Tabの動きを管理
  tab_true.tab_color();//正確なポジショニングを示すTabの色の状態
  tab_true.tab_text();//正確なポジショニングを示すTabの文章を管理
  tab_true.mousePressed();//正確なポジショニングを示すマウスクリックされた時の範囲を管理
@@ -113,10 +199,45 @@ void draw(){
  tab_false.tab_color();//虚偽のポジショニングを示すTabの色の状態
  tab_false.tab_text();//虚偽のポジショニングを示すTabの文章を管理
  tab_false.mousePressed();//虚偽のポジショニングを示すマウスクリックされた時の範囲を管理
-
- camera.camera_drawing();
 }
 
+//midibusを管理している
+void rawMidi(byte[] data) { // You can also use rawMidi(byte[] data, String bus_name) 
+  println();
+  print("Status Byte/MIDI Command:"+(int)(data[0] & 0xFF));
+  if (((int)(data[0] & 0xFF) >= 224)&&((int)(data[0] & 0xFF) <= 227)) {
+    pitchbend = (int)(data[2] & 0xFF) * 128 + (int)(data[1] & 0xFF);
+  } 
+ for (int i = 1; i < data.length; i++) {
+    print(": "+(i+1)+": "+(int)(data[i] & 0xFF));
+ }
+ for (int i = 1; i < data.length; i++) {
+ print(": "+(i+1)+": "+(int)(data[i] & 0xFF));
+  }
+if (((int)(data[0] & 0xFF) >= 144)&&((int)(data[0] & 0xFF) <= 171)) {
+    notebus_different=((data[1] & 0xFF)-(note[note_y][note_x].pointer()).MidiValue())*333+pitchbend-8192;
+    note[note_y][note_x].addNote(notebus_different);
+  }
+if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
+    println();
+ if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {      
+    }
+    if ((int)(data[1] & 0xFF)==(note[note_y][note_x].pointer()).MidiValue()) {
+      note_x++;
+      if (note_x!=0&&note_x==8) {
+        note_y++;
+        note_x=0;
+        if (note_y>3) {
+          note_y=0;
+        }
+      }
+    }
+  }
+}
+
+void captureEvent(Capture video) {
+  video.read();
+}
 void mouseClicked() {
   println("x"+mouseX+" "+"y"+mouseY);
   return;

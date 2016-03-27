@@ -26,6 +26,7 @@ public int getY() {
   }
   void tab_text(){ //それぞれのタブのテキスト部分
   	fill(255);
+    textSize(12);
   	text("mouseX:"+mouseX, 40,40, 90,60);
   	text("mouseY:"+mouseY, 40,60, 90,60);
   	text("True Position Learning", 80, 955);

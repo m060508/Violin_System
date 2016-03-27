@@ -17,10 +17,11 @@ public class Violin_System extends PApplet {
 PImage all_score, part_score, left_grad, right_grad; //\u5168\u4f53\u697d\u8b5c, \u697d\u8b5c\u306e\u4e00\u90e8, \u5de6\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3, \u53f3\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3
 ScoreNote[][]note = new ScoreNote[4][8];//note[y\u8ef8\u5411\u304d\u306b\u6bb5\u6570][x\u8ef8\u5411\u304d\u306b\u97f3\u6570
 Color []color_rect = new Color[22];//\u8272\u309222\u8272\u3067\u7ba1\u7406
-Tab tab_true, tab_ambiguous, tab_false;
+Tab tab_true, tab_ambiguous, tab_false;//\u30bf\u30d6
+NoCamera camera; //\u30ab\u30e1\u30e9\u304c\u306a\u3044\u969b\u306e\u30ab\u30e1\u30e9
 
 public void setup() {
-   // \u753b\u9762\u30b5\u30a4\u30ba\u3092\u6c7a\u5b9a
+  // \u753b\u9762\u30b5\u30a4\u30ba\u3092\u6c7a\u5b9a
  all_score = loadImage("all_score.png"); //\u5168\u4f53\u697d\u8b5c\u3092\u7528\u610f
  part_score = loadImage("part_score.png"); //\u697d\u8b5c\u306e\u4e00\u90e8\u3092\u7528\u610f
  left_grad = loadImage("left_grad.png"); //\u5de6\u7528\u30b0\u30e9\u30c7\u3092\u7528\u610f
@@ -101,39 +102,47 @@ public void setup() {
   tab_true = new Tab(50, 920); //Tab\u306e\u6b63\u78baver
   tab_ambiguous = new Tab(250, 920); //Tab\u306e\u66d6\u6627ver
   tab_false = new Tab(450, 920); //Tab\u306e\u865a\u507dver
+
+  camera = new NoCamera(170, 300);
 }
 
 public void draw(){
  background(0);
+
+//\u697d\u8b5c\u306e\u8868\u793a
  image(all_score, 800, 100, 1200, 741);//\u5168\u4f53\u697d\u8b5c\u3092\u914d\u7f6e
- //image(part_score, 90, 50, 1141, 148);//\u697d\u8b5c\u306e\u4e00\u90e8
- part_score = part_score.get(0,0,680,148);
- image(part_score,90,50,680,148);
- image(left_grad, 70, 40, 88, 178);
- image(right_grad, 700, 40, 88, 178);
- tab_true.tab_rect();
- tab_true.tab_color();
- tab_true.tab_text();
- tab_true.mousePressed();
- tab_ambiguous.tab_rect();
- tab_ambiguous.tab_color();
- tab_ambiguous.tab_text();
- tab_ambiguous.mousePressed();
- tab_false.tab_rect();
- tab_false.tab_color();
- tab_false.tab_text();
- tab_false.mousePressed();
+ //image(part_score, 90, 50, 4559, 148);//\u697d\u8b5c\u306e\u4e00\u6bb5\u843d\u3092\u914d\u7f6e
+ part_score = part_score.get(0,0,680,148);//\u697d\u8b5c\u306e\u4e00\u6bb5\u843d\u306e\u3046\u3061\u5f3e\u3044\u3066\u3044\u308b\u7b87\u6240\u306e\u307f\u5207\u308a\u629c\u304d
+ image(part_score,90,50,680,148);//\u5207\u308a\u629c\u3044\u305f\u697d\u8b5c\u3092\u8868\u793a
+ image(left_grad, 70, 40, 88, 178); //\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3\u5de6\u3092\u914d\u7f6e
+ image(right_grad, 700, 40, 88, 178);//\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3\u53f3\u3092\u914d\u7f6e
+
+ //Tab\u306e\u52d5\u304d\u3092\u7ba1\u7406
+ tab_true.tab_color();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
+ tab_true.tab_text();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
+ tab_true.mousePressed();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3055\u308c\u305f\u6642\u306e\u7bc4\u56f2\u3092\u7ba1\u7406
+
+ tab_ambiguous.tab_color();//\u66d6\u6627\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
+ tab_ambiguous.tab_text();//\u66d6\u6627\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
+ tab_ambiguous.mousePressed();//\u66d6\u6627\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3055\u308c\u305f\u6642\u306e\u7bc4\u56f2\u3092\u7ba1\u7406
+
+ tab_false.tab_color();//\u865a\u507d\u306e\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
+ tab_false.tab_text();//\u865a\u507d\u306e\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
+ tab_false.mousePressed();//\u865a\u507d\u306e\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3055\u308c\u305f\u6642\u306e\u7bc4\u56f2\u3092\u7ba1\u7406
+
+ camera.camera_drawing();
 }
 
 public void mouseClicked() {
   println("x"+mouseX+" "+"y"+mouseY);
   return;
 }
-class Color {
+class Color{ //\u97f3\u306e\u5909\u5316\u306e\u8272\u3092\u793a\u3059\u30af\u30e9\u30b9
   private int r;
   private int g;
   private int b;
-  Color(int r, int g, int b) {
+  Color(int r, int g, int b){ 
+ 
     this.r=r;
     this.g=g;
     this.b=b;
@@ -152,7 +161,36 @@ class Color {
     noStroke();
     fill(r, g, b);
   }
-  
+}
+class NoCamera{
+	private int x;
+	private int y;
+
+NoCamera(int x, int y){
+		this.x = x;
+		this.y = y;
+	}
+
+public int getX(){
+      return this.x;
+	}
+	public int getY(){
+     return this.y;
+	}
+
+public void camera_drawing(){
+	fill(105,105,105); //\u30ab\u30e1\u30e9\u304c\u306a\u3044\u7528\u306e\u30dc\u30c3\u30af\u30b9
+	rect(x, y, 500, 470);
+    for(int i =0; i < 4; i++){
+    	line(x+100+100*i, y, x+100+100*i, y+470);//\u7e26\u7dda\u3092\u7528\u610f(G\u301cE\u7dda)	
+    }
+    stroke(0);
+    line(x, 370, x+500, 370);//1\u306e\u6307
+    line(x, 440, x+500, 440);//2\u306e\u6307(G5\u7528)
+    
+    line(x, 580, x+500, 580);//2\u306e\u6307(C5\u7528)
+    line(x, 650, x+500, 650);//3\u306e\u6307
+	}
 
 }
 class Pointer{
@@ -202,12 +240,10 @@ public int getY() {
     return this.y;
   }
 
-  public void tab_rect() { //\u4f55\u3082\u89e6\u3063\u3066\u3044\u306a\u3044\u6642\u306eTab\u306e\u72b6\u614b
+  public void tab_color(){ //\u30de\u30a6\u30b9\u304c\u89e6\u308c\u305f\u3068\u3053\u308d\u306b\u8272\u3092\u3064\u3051\u308b
     stroke(255);
     fill(0);
     rect(x, y, 200, 60); 
-  }
-  public void tab_color(){ //\u30de\u30a6\u30b9\u304c\u89e6\u308c\u305f\u3068\u3053\u308d\u306b\u8272\u3092\u3064\u3051\u308b
     if( ((x <= mouseX)&&(mouseX < x+200)) && ((y <= mouseY)&&(mouseY <= y+60)) )
     {
     fill(105, 105, 105);//\u30de\u30a6\u30b9\u304c\u89e6\u308c\u305f\u5834\u5408\uff0c\u8272\u3092\u7070\u8272\u306b\u3059\u308b
@@ -234,8 +270,9 @@ public int getY() {
   	fill(255);
   	text("This mode teaches only false position.", 80, 1000);
   }
-  println("Number:"+number);
+  //println("Number:"+number);
   }
+
   public void mousePressed() {
   for(int i = 0; i < 3 ;i++){
   	if((mousePressed)&&( (( 50+ 200*i <= mouseX)&&(mouseX < 50+200*i+200)) && ((920 <= mouseY)&&(mouseY <= 980)) ))

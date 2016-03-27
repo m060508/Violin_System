@@ -1,10 +1,11 @@
 PImage all_score, part_score, left_grad, right_grad; //全体楽譜, 楽譜の一部, 左用グラデーション, 右用グラデーション
 ScoreNote[][]note = new ScoreNote[4][8];//note[y軸向きに段数][x軸向きに音数
 Color []color_rect = new Color[22];//色を22色で管理
-Tab tab_true, tab_ambiguous, tab_false;
+Tab tab_true, tab_ambiguous, tab_false;//タブ
+NoCamera camera; //カメラがない際のカメラ
 
 void setup() {
-  fullScreen(P2D); // 画面サイズを決定
+ fullScreen(P2D); // 画面サイズを決定
  all_score = loadImage("all_score.png"); //全体楽譜を用意
  part_score = loadImage("part_score.png"); //楽譜の一部を用意
  left_grad = loadImage("left_grad.png"); //左用グラデを用意
@@ -85,28 +86,35 @@ void setup() {
   tab_true = new Tab(50, 920); //Tabの正確ver
   tab_ambiguous = new Tab(250, 920); //Tabの曖昧ver
   tab_false = new Tab(450, 920); //Tabの虚偽ver
+
+  camera = new NoCamera(170, 300);
 }
 
 void draw(){
  background(0);
+
+//楽譜の表示
  image(all_score, 800, 100, 1200, 741);//全体楽譜を配置
- //image(part_score, 90, 50, 1141, 148);//楽譜の一部
- part_score = part_score.get(0,0,680,148);
- image(part_score,90,50,680,148);
- image(left_grad, 70, 40, 88, 178);
- image(right_grad, 700, 40, 88, 178);
- tab_true.tab_rect();
- tab_true.tab_color();
- tab_true.tab_text();
- tab_true.mousePressed();
- tab_ambiguous.tab_rect();
- tab_ambiguous.tab_color();
- tab_ambiguous.tab_text();
- tab_ambiguous.mousePressed();
- tab_false.tab_rect();
- tab_false.tab_color();
- tab_false.tab_text();
- tab_false.mousePressed();
+ //image(part_score, 90, 50, 4559, 148);//楽譜の一段落を配置
+ part_score = part_score.get(0,0,680,148);//楽譜の一段落のうち弾いている箇所のみ切り抜き
+ image(part_score,90,50,680,148);//切り抜いた楽譜を表示
+ image(left_grad, 70, 40, 88, 178); //グラデーション左を配置
+ image(right_grad, 700, 40, 88, 178);//グラデーション右を配置
+
+ //Tabの動きを管理
+ tab_true.tab_color();//正確なポジショニングを示すTabの色の状態
+ tab_true.tab_text();//正確なポジショニングを示すTabの文章を管理
+ tab_true.mousePressed();//正確なポジショニングを示すマウスクリックされた時の範囲を管理
+
+ tab_ambiguous.tab_color();//曖昧なポジショニングを示すTabの色の状態
+ tab_ambiguous.tab_text();//曖昧なポジショニングを示すTabの文章を管理
+ tab_ambiguous.mousePressed();//曖昧なポジショニングを示すマウスクリックされた時の範囲を管理
+
+ tab_false.tab_color();//虚偽のポジショニングを示すTabの色の状態
+ tab_false.tab_text();//虚偽のポジショニングを示すTabの文章を管理
+ tab_false.mousePressed();//虚偽のポジショニングを示すマウスクリックされた時の範囲を管理
+
+ camera.camera_drawing();
 }
 
 void mouseClicked() {

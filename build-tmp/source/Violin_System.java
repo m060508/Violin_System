@@ -29,7 +29,7 @@ public class Violin_System extends PApplet {
 
 
 //\u753b\u50cf\u7528\u5909\u6570
-PImage all_score, part_score, left_grad, right_grad; //\u5168\u4f53\u697d\u8b5c, \u697d\u8b5c\u306e\u4e00\u90e8, \u5de6\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3, \u53f3\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3
+PImage all_score, part_score, left_grad, right_grad, positioning; //\u5168\u4f53\u697d\u8b5c, \u697d\u8b5c\u306e\u4e00\u90e8, \u5de6\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3, \u53f3\u7528\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3
 
 //\u4e3b\u306b\u697d\u8b5c\u306e\u97f3\u3092\u7ba1\u7406\u3059\u308b\u7528
 ScoreNote[][]note = new ScoreNote[4][8];//note[y\u8ef8\u5411\u304d\u306b\u6bb5\u6570][x\u8ef8\u5411\u304d\u306b\u97f3\u6570
@@ -77,17 +77,18 @@ public void setup() {
  all_score = loadImage("all_score.png"); //\u5168\u4f53\u697d\u8b5c\u3092\u7528\u610f
  part_score = loadImage("part_score.png"); //\u697d\u8b5c\u306e\u4e00\u90e8\u3092\u7528\u610f
  left_grad = loadImage("left_grad.png"); //\u5de6\u7528\u30b0\u30e9\u30c7\u3092\u7528\u610f
- right_grad = loadImage("right_grad.png"); //\u53f3\u7528\u30b0\u30e9\u30c7\u3092\u7528\u610f;
+ right_grad = loadImage("right_grad.png"); //\u53f3\u7528\u30b0\u30e9\u30c7\u3092\u7528\u610f
+ positioning = loadImage("point.png");//\u30dd\u30a4\u30f3\u30bf\u7528\u306e\u753b\u50cf\u3092\u7528\u610f
 
 //Pointer NoteName = new Pointer (NoteNumber, PointerX, PointerY);
  Pointer A4 = new Pointer(69, -200, -200);
- Pointer B4 = new Pointer(71, 431, 459);
- Pointer C5 = new Pointer(73, 437, 554);
- Pointer D5 = new Pointer(74, 439, 594);
+ Pointer B4 = new Pointer(71, 411, 459);
+ Pointer C5 = new Pointer(73, 417, 554);
+ Pointer D5 = new Pointer(74, 419, 594);
  Pointer E5 = new Pointer(76, -200, -200);
- Pointer F5 = new Pointer(78, 451, 463);
- Pointer G5 = new Pointer(79, 452, 513);
- Pointer A5 = new Pointer(81, 456, 604);
+ Pointer F5 = new Pointer(78, 431, 463);
+ Pointer G5 = new Pointer(79, 432, 513);
+ Pointer A5 = new Pointer(81, 436, 604);
 
 //note[note_y][note_x] = new Note(all_score_PositionX, \u00d7\u306e\u521d\u671f\u8a2d\u5b9a, NoteName);
   note[0][0] = new ScoreNote(919, 0, A4);
@@ -216,9 +217,6 @@ note[note_y][note_x].note_recorder();//\u97f3\u306e\u305a\u308c
 //\u30df\u30b9\u306e\u56de\u6570
 note[note_y][note_x].sum_false();//\u30df\u30b9\u306e\u30ab\u30a6\u30f3\u30c8\u3068\u30c6\u30ad\u30b9\u30c8\u3092\u8868\u793a
 
-//\u30dd\u30a4\u30f3\u30bf\u30fc\u8868\u793a
-(note[note_y][note_x].pointer()).point();//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u793a\u3059\u8d64\u7dda\u7528
-(note[note_y][note_x].pointer()).string_point();//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u793a\u3059\u9752\u7dda\u7528
 //Tab\u306e\u52d5\u304d\u3092\u7ba1\u7406
  tab_true.tab_color();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
  tab_true.tab_text();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
@@ -308,7 +306,7 @@ class Pointer{
   private int midi_value;
   private int pos_x;
   private int pos_y;
-  
+   float random_value = 60*random(0,3);
   Pointer(int midi_value, int pos_x, int pos_y){
     this.midi_value = midi_value;
     this.pos_x = pos_x;
@@ -325,20 +323,92 @@ class Pointer{
   	return this.pos_y;
   }
 
-  public void point(){//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u8d64\u7dda\u3067\u8868\u793a
-    stroke(255, 0, 0);
-    line(110,(note[note_y][note_x].pointer()).pos_y, 650, (note[note_y][note_x].pointer()).pos_y);
+  public void point(){//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u30dd\u30a4\u30f3\u30bf\u3067\u8868\u793a
+    image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y, 40, 40);
   }
-  public void string_point(){//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u9752\u7dda\u3067\u8868\u793a
+  public void string_point(){//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u7dd1\u7dda\u3067\u8868\u793a
     if(((note[note_y][note_x].pointer()).midi_value >= 69) && ((note[note_y][note_x].pointer()).midi_value < 75)){
-     stroke(0, 0, 255);
-      line(431,365,452, 893);
+     stroke(0, 255, 0);
+     line(431,365,452, 893);
     }
     if(((note[note_y][note_x].pointer()).midi_value >= 75) && ((note[note_y][note_x].pointer()).midi_value < 82)){
-  stroke(0, 0, 255);
-      line(448,365,470, 893);
+     stroke(0, 255, 0);
+     line(448,365,470, 893);
   }
   }
+
+  public void ambiguous_point(){//\u66d6\u6627\u60c5\u5831\u7528
+    if((note[note_y][note_x].pointer()).midi_value == 69){
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y+670+random_value, 40, 40);
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 71){
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y+random_value, 40, 40);
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 73){
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y+random_value, 40, 40);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y-random_value, 40, 40);
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 74){
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y-random_value, 40, 40);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y-random_value+150, 40, 40);
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 76){
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y+670+random_value, 40, 40);
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 78){
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y+random_value, 40, 40);
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 79){
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y+random_value, 40, 40);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y-random_value, 40, 40);
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 81){
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y-random_value, 40, 40);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y-random_value+150, 40, 40);
+    }
+  }
+
+public void false_point(){
+  if((note[note_y][note_x].pointer()).midi_value == 69){
+     stroke(0, 255, 0);
+     line(448,365,470, 893);//\u5f3e\u304f\u5f26\u306b\u865a\u507d
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 71){
+     stroke(0, 255, 0);
+     line(431,365,452, 893);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y, 40, 40);//\u672c\u7269
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 73){
+     stroke(0, 255, 0);
+     line(431,365,452, 893);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y, 40, 40);//\u672c\u7269
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 74){
+     stroke(0, 255, 0);
+     line(431,365,452, 893);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y-random_value, 40, 40);//\u865a\u507d
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 76){
+     stroke(0, 255, 0);
+     line(431,365,452, 893);//\u5f3e\u304f\u5f26\u306b\u865a\u507d
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 78){
+     stroke(0, 255, 0);
+     line(448,365,470, 893);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y, 40, 40);//\u865a\u507d
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 79){
+     stroke(0, 255, 0);
+     line(448,365,470, 893);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y, 40, 40);//\u672c\u7269
+    }
+    else if((note[note_y][note_x].pointer()).midi_value == 81){
+     stroke(0, 255, 0);
+     line(448,365,470, 893);
+     image(positioning, (note[note_y][note_x].pointer()).pos_x, (note[note_y][note_x].pointer()).pos_y, 40, 40);//\u672c\u7269
+    
+  }
+}
 }
 class ScoreNote {
   private int x;
@@ -554,14 +624,20 @@ public int getY() {
     if(number == 0){//tab_true\u304c\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3055\u308c\u305f\u6642
   	fill(255);
   	text("This mode teaches only true position.", 80, 1000);
+    (note[note_y][note_x].pointer()).point();//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u793a\u3059\u8d64\u7dda\u7528
+    (note[note_y][note_x].pointer()).string_point();//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u793a\u3059\u9752\u7dda\u7528
   }
   else if(number == 1){//tab_ambiguous\u304c\u3055\u308c\u305f\u6642	
   	fill(255);
   	text("This mode teaches true position and false position.", 80, 1000);
+    (note[note_y][note_x].pointer()).point();//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u793a\u3059\u8d64\u7dda\u7528
+    (note[note_y][note_x].pointer()).string_point();//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u793a\u3059\u9752\u7dda\u7528
+    (note[note_y][note_x].pointer()).ambiguous_point();//\u66d6\u6627\u60c5\u5831\u3092\u7e54\u308a\u4ea4\u305c\u305f\u8d64\u7dda\u7528
   }
   else if(number == 2){//tab_false\u304c\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af	\u3055\u308c\u305f\u6642	
   	fill(255);
   	text("This mode teaches only false position.", 80, 1000);
+    (note[note_y][note_x].pointer()).false_point();
   }
   }
 

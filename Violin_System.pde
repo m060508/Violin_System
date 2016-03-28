@@ -6,7 +6,7 @@ import processing.video.*;  //ビデオライブラリをインポート
 import processing.opengl.*;
 
 //画像用変数
-PImage all_score, part_score, left_grad, right_grad; //全体楽譜, 楽譜の一部, 左用グラデーション, 右用グラデーション
+PImage all_score, part_score, left_grad, right_grad, positioning; //全体楽譜, 楽譜の一部, 左用グラデーション, 右用グラデーション
 
 //主に楽譜の音を管理する用
 ScoreNote[][]note = new ScoreNote[4][8];//note[y軸向きに段数][x軸向きに音数
@@ -54,17 +54,18 @@ void setup() {
  all_score = loadImage("all_score.png"); //全体楽譜を用意
  part_score = loadImage("part_score.png"); //楽譜の一部を用意
  left_grad = loadImage("left_grad.png"); //左用グラデを用意
- right_grad = loadImage("right_grad.png"); //右用グラデを用意;
+ right_grad = loadImage("right_grad.png"); //右用グラデを用意
+ positioning = loadImage("point.png");//ポインタ用の画像を用意
 
 //Pointer NoteName = new Pointer (NoteNumber, PointerX, PointerY);
  Pointer A4 = new Pointer(69, -200, -200);
- Pointer B4 = new Pointer(71, 431, 459);
- Pointer C5 = new Pointer(73, 437, 554);
- Pointer D5 = new Pointer(74, 439, 594);
+ Pointer B4 = new Pointer(71, 411, 459);
+ Pointer C5 = new Pointer(73, 417, 554);
+ Pointer D5 = new Pointer(74, 419, 594);
  Pointer E5 = new Pointer(76, -200, -200);
- Pointer F5 = new Pointer(78, 451, 463);
- Pointer G5 = new Pointer(79, 452, 513);
- Pointer A5 = new Pointer(81, 456, 604);
+ Pointer F5 = new Pointer(78, 431, 463);
+ Pointer G5 = new Pointer(79, 432, 513);
+ Pointer A5 = new Pointer(81, 436, 604);
 
 //note[note_y][note_x] = new Note(all_score_PositionX, ×の初期設定, NoteName);
   note[0][0] = new ScoreNote(919, 0, A4);
@@ -193,9 +194,6 @@ note[note_y][note_x].note_recorder();//音のずれ
 //ミスの回数
 note[note_y][note_x].sum_false();//ミスのカウントとテキストを表示
 
-//ポインター表示
-(note[note_y][note_x].pointer()).point();//抑えるべき位置を示す赤線用
-(note[note_y][note_x].pointer()).string_point();//抑えるべき弦を示す青線用
 //Tabの動きを管理
  tab_true.tab_color();//正確なポジショニングを示すTabの色の状態
  tab_true.tab_text();//正確なポジショニングを示すTabの文章を管理

@@ -78,13 +78,13 @@ public void setup() {
 
 //Pointer NoteName = new Pointer (NoteNumber, PointerX, PointerY);
  Pointer A4 = new Pointer(69, -200, -200);
- Pointer B4 = new Pointer(71, 528, 487);
- Pointer C5 = new Pointer(73, 531, 569);
- Pointer D5 = new Pointer(74, 536, 609);
+ Pointer B4 = new Pointer(71, 431, 459);
+ Pointer C5 = new Pointer(73, 437, 554);
+ Pointer D5 = new Pointer(74, 439, 594);
  Pointer E5 = new Pointer(76, -200, -200);
- Pointer F5 = new Pointer(78, 551, 483);
- Pointer G5 = new Pointer(79, 551, 532);
- Pointer A5 = new Pointer(81, 556, 606);
+ Pointer F5 = new Pointer(78, 451, 463);
+ Pointer G5 = new Pointer(79, 452, 513);
+ Pointer A5 = new Pointer(81, 456, 604);
 
 //note[note_y][note_x] = new Note(all_score_PositionX, \u00d7\u306e\u521d\u671f\u8a2d\u5b9a, NoteName);
   note[0][0] = new ScoreNote(919, 0, A4);
@@ -214,6 +214,9 @@ note[note_y][note_x].note_recorder();//\u97f3\u306e\u305a\u308c
 //\u30df\u30b9\u306e\u56de\u6570
 note[note_y][note_x].sum_false();
 
+//\u30dd\u30a4\u30f3\u30bf\u30fc\u8868\u793a
+(note[note_y][note_x].pointer()).point();
+(note[note_y][note_x].pointer()).string_point();
 //Tab\u306e\u52d5\u304d\u3092\u7ba1\u7406
  tab_true.tab_color();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
  tab_true.tab_text();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
@@ -317,6 +320,22 @@ class Pointer{
   }
   public int PosY(){
   	return this.pos_y;
+  }
+
+  public void point(){
+    stroke(255, 0, 0);
+    line(110,(note[note_y][note_x].pointer()).pos_y, 650, (note[note_y][note_x].pointer()).pos_y);
+  }
+
+  public void string_point(){
+    if(((note[note_y][note_x].pointer()).midi_value >= 69) && ((note[note_y][note_x].pointer()).midi_value < 75)){
+     stroke(0, 255, 0);
+      line(431,365,452, 893);
+    }
+    if(((note[note_y][note_x].pointer()).midi_value >= 75) && ((note[note_y][note_x].pointer()).midi_value < 82)){
+  stroke(0, 255, 0);
+      line(448,365,470, 893);
+  }
   }
 }
 class ScoreNote {
@@ -461,12 +480,15 @@ public void sum_false(){
   int sum = 0;
   for (int i = 0; i < note.length; i++) {
     for (int j=0; j < note[i].length-1; j++) {
-      if (note[i][j].judge >=1) {
+      if (note[i][j].judge == 1) {
         sum++;
       }
-      println(""+sum);
-    }
+      //println("sum:"+sum);
   }
+    }
+    fill(255);
+    textSize(25);
+    text(sum+"/32", 1000, 955);
 }
 }
 class Tab{

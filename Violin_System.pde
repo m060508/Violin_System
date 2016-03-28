@@ -55,13 +55,13 @@ void setup() {
 
 //Pointer NoteName = new Pointer (NoteNumber, PointerX, PointerY);
  Pointer A4 = new Pointer(69, -200, -200);
- Pointer B4 = new Pointer(71, 528, 487);
- Pointer C5 = new Pointer(73, 531, 569);
- Pointer D5 = new Pointer(74, 536, 609);
+ Pointer B4 = new Pointer(71, 431, 459);
+ Pointer C5 = new Pointer(73, 437, 554);
+ Pointer D5 = new Pointer(74, 439, 594);
  Pointer E5 = new Pointer(76, -200, -200);
- Pointer F5 = new Pointer(78, 551, 483);
- Pointer G5 = new Pointer(79, 551, 532);
- Pointer A5 = new Pointer(81, 556, 606);
+ Pointer F5 = new Pointer(78, 451, 463);
+ Pointer G5 = new Pointer(79, 452, 513);
+ Pointer A5 = new Pointer(81, 456, 604);
 
 //note[note_y][note_x] = new Note(all_score_PositionX, ×の初期設定, NoteName);
   note[0][0] = new ScoreNote(919, 0, A4);
@@ -191,6 +191,9 @@ note[note_y][note_x].note_recorder();//音のずれ
 //ミスの回数
 note[note_y][note_x].sum_false();
 
+//ポインター表示
+(note[note_y][note_x].pointer()).point();
+(note[note_y][note_x].pointer()).string_point();
 //Tabの動きを管理
  tab_true.tab_color();//正確なポジショニングを示すTabの色の状態
  tab_true.tab_text();//正確なポジショニングを示すTabの文章を管理

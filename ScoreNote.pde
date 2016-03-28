@@ -140,11 +140,14 @@ void sum_false(){
   int sum = 0;
   for (int i = 0; i < note.length; i++) {
     for (int j=0; j < note[i].length-1; j++) {
-      if (note[i][j].judge >=1) {
+      if (note[i][j].judge == 1) {
         sum++;
       }
-      println(""+sum);
-    }
+      //println("sum:"+sum);
   }
+    }
+    fill(255);
+    textSize(25);
+    text(sum+"/32", 1000, 955);
 }
 }

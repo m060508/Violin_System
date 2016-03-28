@@ -18,4 +18,20 @@ class Pointer{
   public int PosY(){
   	return this.pos_y;
   }
+
+  void point(){
+    stroke(255, 0, 0);
+    line(110,(note[note_y][note_x].pointer()).pos_y, 650, (note[note_y][note_x].pointer()).pos_y);
+  }
+
+  void string_point(){
+    if(((note[note_y][note_x].pointer()).midi_value >= 69) && ((note[note_y][note_x].pointer()).midi_value < 75)){
+     stroke(0, 0, 255);
+      line(431,365,452, 893);
+    }
+    if(((note[note_y][note_x].pointer()).midi_value >= 75) && ((note[note_y][note_x].pointer()).midi_value < 82)){
+  stroke(0, 0, 255);
+      line(448,365,470, 893);
+  }
+  }
 }

@@ -35,12 +35,11 @@ PImage all_score, part_score, left_grad, right_grad; //\u5168\u4f53\u697d\u8b5c,
 ScoreNote[][]note = new ScoreNote[4][8];//note[y\u8ef8\u5411\u304d\u306b\u6bb5\u6570][x\u8ef8\u5411\u304d\u306b\u97f3\u6570
 int note_y, note_x = 0;
 
-//\u8272\u3092\u7ba1\u7406\u3059\u308b\u305f\u3081\u306e\u914d\u5217
-Color []col = new Color[22];//\u8272\u309222\u8272\u3067\u7ba1\u7406
+//\u8272\u3092\u7ba1\u7406\u3059\u308b\u7528
+Color []col = new Color[22];//\u8272\u309222\u8272\u306e\u914d\u5217\u3067\u7ba1\u7406
 
 //\u30bf\u30d6\u3092\u7ba1\u7406\u3059\u308b\u305f\u3081\u306e\u5909\u6570
 Tab tab_true, tab_ambiguous, tab_false;//\u30bf\u30d6
-//NoCamera camera; //\u30ab\u30e1\u30e9\u304c\u306a\u3044\u969b\u306e\u30ab\u30e1\u30e9
 
 //web\u30ab\u30e1\u30e9\u7528
 Capture video;  //Capture\u578b\u306e\u5909\u6570video\u3092\u5ba3\u8a00
@@ -60,7 +59,7 @@ int second_byte = 80; // But with less velocity
 ArrayList<ScoreNote> played_note;//pitchbend\u3067\u5f97\u305f\u3069\u306e\u7a0b\u5ea6\u305a\u308c\u3066\u3044\u308b\u304b\u3092\u5165\u308c\u308b\u305f\u3081\u306e\u914d\u5217\u3092\u7528\u610f
 
 public void setup() {
-  //\u753b\u9762
+//\u753b\u9762
   // \u753b\u9762\u30b5\u30a4\u30ba\u3092\u6c7a\u5b9a
 
 //midibus\u7528
@@ -87,42 +86,42 @@ public void setup() {
  Pointer G5 = new Pointer(79, 551, 532);
  Pointer A5 = new Pointer(81, 556, 606);
 
-//note[note_y][note_x] = new Note(all_score_PositionX, all_score_PositionY, NoteName);
-  note[0][0] = new ScoreNote(919, 175, A4);
-  note[0][1] = new ScoreNote(1044, 169, B4);
-  note[0][2] = new ScoreNote(1172, 165, C5);
-  note[0][3] = new ScoreNote(1299, 158, D5);
-  note[0][4] = new ScoreNote(1443, 154, E5);
-  note[0][5] = new ScoreNote(1577, 146, F5);
-  note[0][6] = new ScoreNote(1712, 142, G5);
-  note[0][7] = new ScoreNote(1846, 136, A5);
+//note[note_y][note_x] = new Note(all_score_PositionX, \u00d7\u306e\u521d\u671f\u8a2d\u5b9a, NoteName);
+  note[0][0] = new ScoreNote(919, 0, A4);
+  note[0][1] = new ScoreNote(1044, 0, B4);
+  note[0][2] = new ScoreNote(1172, 0, C5);
+  note[0][3] = new ScoreNote(1299, 0, D5);
+  note[0][4] = new ScoreNote(1443, 0, E5);
+  note[0][5] = new ScoreNote(1577, 0, F5);
+  note[0][6] = new ScoreNote(1712, 0, G5);
+  note[0][7] = new ScoreNote(1846, 0, A5);
 
-  note[1][0] = new ScoreNote(919, 175+212*1, A4);
-  note[1][1] = new ScoreNote(1044, 169+212*1, B4);
-  note[1][2] = new ScoreNote(1172, 165+212*1, C5);
-  note[1][3] = new ScoreNote(1299, 158+212*1, D5);
-  note[1][4] = new ScoreNote(1443, 154+212*1, E5);
-  note[1][5] = new ScoreNote(1577, 146+212*1, F5);
-  note[1][6] = new ScoreNote(1712, 142+212*1, G5);
-  note[1][7] = new ScoreNote(1846, 136+212*1, A5);
+  note[1][0] = new ScoreNote(919, 0, A4);
+  note[1][1] = new ScoreNote(1044, 0, B4);
+  note[1][2] = new ScoreNote(1172, 0, C5);
+  note[1][3] = new ScoreNote(1299, 0, D5);
+  note[1][4] = new ScoreNote(1443, 0, E5);
+  note[1][5] = new ScoreNote(1577, 0, F5);
+  note[1][6] = new ScoreNote(1712, 0, G5);
+  note[1][7] = new ScoreNote(1846, 0, A5);
 
-  note[2][0] = new ScoreNote(919, 175+212*2, A4);
-  note[2][1] = new ScoreNote(1044, 169+212*2, B4);
-  note[2][2] = new ScoreNote(1172, 165+212*2, C5);
-  note[2][3] = new ScoreNote(1299, 158+212*2, D5);
-  note[2][4] = new ScoreNote(1443, 154+212*2, E5);
-  note[2][5] = new ScoreNote(1577, 146+212*2, F5);
-  note[2][6] = new ScoreNote(1712, 142+212*2, G5);
-  note[2][7] = new ScoreNote(1846, 136+212*2, A5);
+  note[2][0] = new ScoreNote(919, 0, A4);
+  note[2][1] = new ScoreNote(1044, 0, B4);
+  note[2][2] = new ScoreNote(1172, 0, C5);
+  note[2][3] = new ScoreNote(1299, 0, D5);
+  note[2][4] = new ScoreNote(1443, 0, E5);
+  note[2][5] = new ScoreNote(1577, 0, F5);
+  note[2][6] = new ScoreNote(1712, 0, G5);
+  note[2][7] = new ScoreNote(1846, 0, A5);
 
-  note[3][0] = new ScoreNote(919, 175+212*3, A4);
-  note[3][1] = new ScoreNote(1044, 169+212*3, B4);
-  note[3][2] = new ScoreNote(1172, 165+212*3, C5);
-  note[3][3] = new ScoreNote(1299, 158+212*3, D5);
-  note[3][4] = new ScoreNote(1443, 154+212*3, E5);
-  note[3][5] = new ScoreNote(1577, 146+212*3, F5);
-  note[3][6] = new ScoreNote(1712, 142+212*3, G5);
-  note[3][7] = new ScoreNote(1846, 136+212*3, A5);
+  note[3][0] = new ScoreNote(919, 0, A4);
+  note[3][1] = new ScoreNote(1044, 0, B4);
+  note[3][2] = new ScoreNote(1172, 0, C5);
+  note[3][3] = new ScoreNote(1299, 0, D5);
+  note[3][4] = new ScoreNote(1443, 0, E5);
+  note[3][5] = new ScoreNote(1577, 0, F5);
+  note[3][6] = new ScoreNote(1712, 0, G5);
+  note[3][7] = new ScoreNote(1846, 0, A5);
 
 //col[number] = new Color(R, G, B)
   col[0] = new Color(0, 0, 255);
@@ -148,12 +147,11 @@ public void setup() {
   col[19] = new Color(238, 129, 127);
   col[20] = new Color(234, 93, 87);
   col[21] = new Color(255, 0, 0);
-  
+
+  //tab\u7528
   tab_true = new Tab(50, 920);//Tab\u306e\u6b63\u78baver
   tab_ambiguous = new Tab(250, 920);//Tab\u306e\u66d6\u6627ver
   tab_false = new Tab(450, 920);//Tab\u306e\u865a\u507dver
-
- // camera = new NoCamera(170, 300);
  
  //midibus\u3092\u7ba1\u7406
  myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
@@ -177,7 +175,6 @@ public void setup() {
   } 
   catch(Exception e) {
   }
-
 }
 
 public void draw(){
@@ -205,21 +202,14 @@ video.read();
 note[note_y][note_x].blue_triangle(); 
 
 //\u305a\u308c\u5225\u306e\u8272\u306e\u898b\u672c\u3092\u8868\u793a
-  for (int i = 0; i < col.length; i++) {
-    col[i].color_rect();
-    rect(1000+i*30, 20, 20, 20);
-  }
-  fill(255);
-  textSize(20);
-  text("low tone", 900, 20, 100, 40);
-  text("high tone", 1670, 20, 100, 40);
+note[note_y][note_x].color_example();
 
 //\u305d\u306e\u5834\u3067\u5f3e\u3044\u305f\u97f3\u306e\u305a\u308c\u3092\u8868\u793a
-if (note[note_y][note_x].played_note.size()>0) {
-    col[note[note_y][note_x].getNote(note[note_y][note_x].played_note.size()-1)].color_rect();
-    rect(200, 160, 30, 30);
-  }
+note[note_y][note_x].real_time_color();
 
+//\u97f3\u306e\u8a18\u9332\uff08\u8272\u3068\u00d7\u306e\u8868\u793a\uff09
+note[note_y][note_x].note_recorder();//\u97f3\u306e\u305a\u308c
+ note[note_y][note_x].judgement();//\u00d7\u3092\u3064\u3051\u308b
 
 //Tab\u306e\u52d5\u304d\u3092\u7ba1\u7406
  tab_true.tab_color();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
@@ -254,7 +244,8 @@ if (((int)(data[0] & 0xFF) >= 144)&&((int)(data[0] & 0xFF) <= 171)) {
   }
 if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     println();
- if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {      
+ if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {
+    note[note_y][note_x].judge = 1;      
     }
     if ((int)(data[1] & 0xFF)==(note[note_y][note_x].pointer()).MidiValue()) {
       note_x++;
@@ -304,46 +295,6 @@ class Color{ //\u97f3\u306e\u5909\u5316\u306e\u8272\u3092\u793a\u3059\u30af\u30e
     fill(r, g, b);
   }
 }
-/*class NoCamera{
-	private int x;
-	private int y;
-
-NoCamera(int x, int y){
-		this.x = x;
-		this.y = y;
-	}
-
-public int getX(){
-      return this.x;
-	}
-	public int getY(){
-     return this.y;
-	}
-
-void camera_drawing(){
-	fill(105,105,105); //\u30ab\u30e1\u30e9\u304c\u306a\u3044\u7528\u306e\u30dc\u30c3\u30af\u30b9
-	rect(x, y, 500, 470);
-    for(int i =0; i < 4; i++){
-    	line(x+100+100*i, y, x+100+100*i, y+470);//\u7e26\u7dda\u3092\u7528\u610f(G\u301cE\u7dda)	
-    }
-    stroke(0);
-    line(x, 370, x+500, 370);//1\u306e\u6307\u7528\u306e\u7dda
-    line(x, 440, x+500, 440);//2\u306e\u6307(G5\u7528)\u7528\u306e\u7dda
-    line(x, 580, x+500, 580);//2\u306e\u6307(C5\u7528)\u7528\u306e\u7dda
-    line(x, 650, x+500, 650);//3\u306e\u6307\u7528\u306e\u7dda
-
-    fill(255);
-    text("G", x+100, y-10);//G\u7dda
-    text("D", x+200, y-10);//D\u7dda
-    text("A", x+300, y-10);//A\u7dda
-    text("E", x+400, y-10);//E\u7dda
-
-    text("1", x+510, 370);//1\u306e\u6307
-    text("2", x+510, 440);//2\u306e\u6307(G5\u7528)
-    text("2", x+510, 580);//2\u306e\u6307(C5\u7528)
-    text("3", x+510, 650);//3\u306e\u6307
-	}
-}*/
 class Pointer{
   private int midi_value;
   private int pos_x;
@@ -367,19 +318,21 @@ class Pointer{
 }
 class ScoreNote {
   private int x;
-  private int y;
+  private int judge;
   private Pointer pointer;
   private ArrayList<Integer> played_note = new ArrayList();
- ScoreNote(int x, int y, Pointer pointer){
+
+ ScoreNote(int x, int judge, Pointer pointer){
  	this.x = x;
- 	this.y = y;
+ 	this.judge = judge;
  	this.pointer = pointer;
  }
+
  public int getX() {
     return this.x;
   }
-  public int getY() {
-    return this.y;
+  public int Judge() {
+    return this.judge;
   }
   public Pointer pointer() {
     return this.pointer;
@@ -434,9 +387,11 @@ public void addNote(int n)
     }
     played_note.add(n);
   }
+
   public int getNote(int m) {
     return this.played_note.get(m);
   }
+
   public void blue_triangle() {//\u6c34\u8272\u25bc\u306e\u4f4d\u7f6e\u3068\u5f62\u3092\u7ba1\u7406  
     noStroke();
     fill(186, 233, 255);
@@ -445,11 +400,65 @@ public void addNote(int n)
     text("\u25bc", 210, 38, 40, 40);
   }
 
+public void real_time_color(){//\u30ea\u30a2\u30eb\u30bf\u30a4\u30e0\u3067\u5909\u5316\u3059\u308b\u97f3\u306e\u8272\u3092\u8868\u793a
+  if (note[note_y][note_x].played_note.size()>0) {
+    col[note[note_y][note_x].getNote(note[note_y][note_x].played_note.size()-1)].color_rect();
+    rect(200, 160, 30, 30);
+  }
+}
+
+public void color_example(){//\u53f3\u4e0a\u306e\u8272\u306e\u898b\u672c\u3092\u8868\u793a
+   for (int i = 0; i < col.length; i++) {
+    col[i].color_rect();
+    rect(1000+i*30, 20, 20, 20);
+  }
+  fill(255);
+  textSize(20);
+  text("low tone", 900, 20, 100, 40);//\u6587\u5b57\u8868\u793a
+  text("high tone", 1670, 20, 100, 40);//\u6587\u5b57\u8868\u793a  
+}
+
+ public void note_recorder(){
+  if ((note_x>=0) && (note_y>=0)) {//\u97f3\u304c\u5165\u529b\u3055\u308c\u3066\u3044\u308b\u3053\u3068\u304c\u524d\u63d0
+    for (int i=0; i<note_x; i++) {//\u73fe\u5728\u6f14\u594f\u3057\u3066\u3044\u308b\u6bb5\u843d\u306e\u307f\u306e\u8272\u8868\u793a
+      col[note[note_y][i].getNote(0)].color_rect();//\u6700\u521d\u306e\u97f3\u306e\u305a\u308c\u306e\u8272\u3092\u63a1\u7528
+      rect(note[note_y][i].getX(), 250+212*note_y, 20, 20);//\u97f3\u306e\u305a\u308c\u3092\u8868\u793a
+    }
+    for (int j = 0; j <= note_y-1; j++) {
+      for (int i = 0; i < 8; i++) {//\u73fe\u5728\u6f14\u594f\u3057\u3066\u3044\u308b\u3088\u308a\u3082\u524d\u306e\u8272\u8868\u793a
+        col[note[j][i].getNote(0)].color_rect();//\u6700\u521d\u306e\u97f3\u306e\u305a\u308c\u306e\u8272\u3092\u63a1\u7528
+        rect(note[note_y][i].getX(), 250+212*j, 20, 20);//\u97f3\u306e\u305a\u308c\u3092\u8868\u793a
+      }
+    }
+  }
  }
+ 
+  public void judgement(){
+  if ((note_x>=0) && (note_y>=0)) {//\u97f3\u304c\u5165\u529b\u3055\u308c\u3066\u3044\u308b\u3053\u3068\u304c\u524d\u63d0
+    for (int i=0; i<note_x; i++) {//\u73fe\u5728\u6f14\u594f\u3057\u3066\u3044\u308b\u6bb5\u843d\u306e\u307f\u306e\u8272\u8868\u793a
+      if (note[note_y][i].judge>=1) {
+        fill(255);
+        textSize(25);
+        text("\u00d7", note[note_y][i].getX(), 67+212*note_y, 40, 40);
+      }
+    }
+    for (int j = 0; j <= note_y-1; j++) {
+      for (int i = 0; i < 8; i++) {//\u73fe\u5728\u6f14\u594f\u3057\u3066\u3044\u308b\u3088\u308a\u3082\u524d\u306e\u8272\u8868\u793a
+       if (note[j][i].judge>=1) {
+          fill(255);
+          textSize(25);
+          text("\u00d7", note[note_y][i].getX(), 67+212*j, 40, 40);
+        }
+      }
+    }
+  }
+}
+}
+
 class Tab{
  private int x;
  private int y;
- private int number=0;
+ public int number=0;
 
  Tab(int x, int y){
  	this.x = x;

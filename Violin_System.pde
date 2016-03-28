@@ -12,12 +12,11 @@ PImage all_score, part_score, left_grad, right_grad; //全体楽譜, 楽譜の�
 ScoreNote[][]note = new ScoreNote[4][8];//note[y軸向きに段数][x軸向きに音数
 int note_y, note_x = 0;
 
-//色を管理するための配列
-Color []col = new Color[22];//色を22色で管理
+//色を管理する用
+Color []col = new Color[22];//色を22色の配列で管理
 
 //タブを管理するための変数
 Tab tab_true, tab_ambiguous, tab_false;//タブ
-//NoCamera camera; //カメラがない際のカメラ
 
 //webカメラ用
 Capture video;  //Capture型の変数videoを宣言
@@ -37,7 +36,7 @@ int second_byte = 80; // But with less velocity
 ArrayList<ScoreNote> played_note;//pitchbendで得たどの程度ずれているかを入れるための配列を用意
 
 void setup() {
-  //画面
+//画面
  fullScreen(P2D); // 画面サイズを決定
 
 //midibus用
@@ -64,42 +63,42 @@ void setup() {
  Pointer G5 = new Pointer(79, 551, 532);
  Pointer A5 = new Pointer(81, 556, 606);
 
-//note[note_y][note_x] = new Note(all_score_PositionX, all_score_PositionY, NoteName);
-  note[0][0] = new ScoreNote(919, 175, A4);
-  note[0][1] = new ScoreNote(1044, 169, B4);
-  note[0][2] = new ScoreNote(1172, 165, C5);
-  note[0][3] = new ScoreNote(1299, 158, D5);
-  note[0][4] = new ScoreNote(1443, 154, E5);
-  note[0][5] = new ScoreNote(1577, 146, F5);
-  note[0][6] = new ScoreNote(1712, 142, G5);
-  note[0][7] = new ScoreNote(1846, 136, A5);
+//note[note_y][note_x] = new Note(all_score_PositionX, ×の初期設定, NoteName);
+  note[0][0] = new ScoreNote(919, 0, A4);
+  note[0][1] = new ScoreNote(1044, 0, B4);
+  note[0][2] = new ScoreNote(1172, 0, C5);
+  note[0][3] = new ScoreNote(1299, 0, D5);
+  note[0][4] = new ScoreNote(1443, 0, E5);
+  note[0][5] = new ScoreNote(1577, 0, F5);
+  note[0][6] = new ScoreNote(1712, 0, G5);
+  note[0][7] = new ScoreNote(1846, 0, A5);
 
-  note[1][0] = new ScoreNote(919, 175+212*1, A4);
-  note[1][1] = new ScoreNote(1044, 169+212*1, B4);
-  note[1][2] = new ScoreNote(1172, 165+212*1, C5);
-  note[1][3] = new ScoreNote(1299, 158+212*1, D5);
-  note[1][4] = new ScoreNote(1443, 154+212*1, E5);
-  note[1][5] = new ScoreNote(1577, 146+212*1, F5);
-  note[1][6] = new ScoreNote(1712, 142+212*1, G5);
-  note[1][7] = new ScoreNote(1846, 136+212*1, A5);
+  note[1][0] = new ScoreNote(919, 0, A4);
+  note[1][1] = new ScoreNote(1044, 0, B4);
+  note[1][2] = new ScoreNote(1172, 0, C5);
+  note[1][3] = new ScoreNote(1299, 0, D5);
+  note[1][4] = new ScoreNote(1443, 0, E5);
+  note[1][5] = new ScoreNote(1577, 0, F5);
+  note[1][6] = new ScoreNote(1712, 0, G5);
+  note[1][7] = new ScoreNote(1846, 0, A5);
 
-  note[2][0] = new ScoreNote(919, 175+212*2, A4);
-  note[2][1] = new ScoreNote(1044, 169+212*2, B4);
-  note[2][2] = new ScoreNote(1172, 165+212*2, C5);
-  note[2][3] = new ScoreNote(1299, 158+212*2, D5);
-  note[2][4] = new ScoreNote(1443, 154+212*2, E5);
-  note[2][5] = new ScoreNote(1577, 146+212*2, F5);
-  note[2][6] = new ScoreNote(1712, 142+212*2, G5);
-  note[2][7] = new ScoreNote(1846, 136+212*2, A5);
+  note[2][0] = new ScoreNote(919, 0, A4);
+  note[2][1] = new ScoreNote(1044, 0, B4);
+  note[2][2] = new ScoreNote(1172, 0, C5);
+  note[2][3] = new ScoreNote(1299, 0, D5);
+  note[2][4] = new ScoreNote(1443, 0, E5);
+  note[2][5] = new ScoreNote(1577, 0, F5);
+  note[2][6] = new ScoreNote(1712, 0, G5);
+  note[2][7] = new ScoreNote(1846, 0, A5);
 
-  note[3][0] = new ScoreNote(919, 175+212*3, A4);
-  note[3][1] = new ScoreNote(1044, 169+212*3, B4);
-  note[3][2] = new ScoreNote(1172, 165+212*3, C5);
-  note[3][3] = new ScoreNote(1299, 158+212*3, D5);
-  note[3][4] = new ScoreNote(1443, 154+212*3, E5);
-  note[3][5] = new ScoreNote(1577, 146+212*3, F5);
-  note[3][6] = new ScoreNote(1712, 142+212*3, G5);
-  note[3][7] = new ScoreNote(1846, 136+212*3, A5);
+  note[3][0] = new ScoreNote(919, 0, A4);
+  note[3][1] = new ScoreNote(1044, 0, B4);
+  note[3][2] = new ScoreNote(1172, 0, C5);
+  note[3][3] = new ScoreNote(1299, 0, D5);
+  note[3][4] = new ScoreNote(1443, 0, E5);
+  note[3][5] = new ScoreNote(1577, 0, F5);
+  note[3][6] = new ScoreNote(1712, 0, G5);
+  note[3][7] = new ScoreNote(1846, 0, A5);
 
 //col[number] = new Color(R, G, B)
   col[0] = new Color(0, 0, 255);
@@ -125,12 +124,11 @@ void setup() {
   col[19] = new Color(238, 129, 127);
   col[20] = new Color(234, 93, 87);
   col[21] = new Color(255, 0, 0);
-  
+
+  //tab用
   tab_true = new Tab(50, 920);//Tabの正確ver
   tab_ambiguous = new Tab(250, 920);//Tabの曖昧ver
   tab_false = new Tab(450, 920);//Tabの虚偽ver
-
- // camera = new NoCamera(170, 300);
  
  //midibusを管理
  myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
@@ -154,7 +152,6 @@ void setup() {
   } 
   catch(Exception e) {
   }
-
 }
 
 void draw(){
@@ -182,21 +179,14 @@ video.read();
 note[note_y][note_x].blue_triangle(); 
 
 //ずれ別の色の見本を表示
-  for (int i = 0; i < col.length; i++) {
-    col[i].color_rect();
-    rect(1000+i*30, 20, 20, 20);
-  }
-  fill(255);
-  textSize(20);
-  text("low tone", 900, 20, 100, 40);
-  text("high tone", 1670, 20, 100, 40);
+note[note_y][note_x].color_example();
 
 //その場で弾いた音のずれを表示
-if (note[note_y][note_x].played_note.size()>0) {
-    col[note[note_y][note_x].getNote(note[note_y][note_x].played_note.size()-1)].color_rect();
-    rect(200, 160, 30, 30);
-  }
+note[note_y][note_x].real_time_color();
 
+//音の記録（色と×の表示）
+note[note_y][note_x].note_recorder();//音のずれ
+ note[note_y][note_x].judgement();//×をつける
 
 //Tabの動きを管理
  tab_true.tab_color();//正確なポジショニングを示すTabの色の状態
@@ -231,7 +221,8 @@ if (((int)(data[0] & 0xFF) >= 144)&&((int)(data[0] & 0xFF) <= 171)) {
   }
 if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     println();
- if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {      
+ if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {
+    note[note_y][note_x].judge = 1;      
     }
     if ((int)(data[1] & 0xFF)==(note[note_y][note_x].pointer()).MidiValue()) {
       note_x++;

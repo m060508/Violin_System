@@ -1,18 +1,20 @@
 class ScoreNote {
   private int x;
-  private int y;
+  private int judge;
   private Pointer pointer;
   private ArrayList<Integer> played_note = new ArrayList();
- ScoreNote(int x, int y, Pointer pointer){
+
+ ScoreNote(int x, int judge, Pointer pointer){
  	this.x = x;
- 	this.y = y;
+ 	this.judge = judge;
  	this.pointer = pointer;
  }
+
  public int getX() {
     return this.x;
   }
-  public int getY() {
-    return this.y;
+  public int Judge() {
+    return this.judge;
   }
   public Pointer pointer() {
     return this.pointer;
@@ -67,9 +69,11 @@ public void addNote(int n)
     }
     played_note.add(n);
   }
+
   public int getNote(int m) {
     return this.played_note.get(m);
   }
+
   void blue_triangle() {//水色▼の位置と形を管理  
     noStroke();
     fill(186, 233, 255);
@@ -78,4 +82,58 @@ public void addNote(int n)
     text("▼", 210, 38, 40, 40);
   }
 
+void real_time_color(){//リアルタイムで変化する音の色を表示
+  if (note[note_y][note_x].played_note.size()>0) {
+    col[note[note_y][note_x].getNote(note[note_y][note_x].played_note.size()-1)].color_rect();
+    rect(200, 160, 30, 30);
+  }
+}
+
+void color_example(){//右上の色の見本を表示
+   for (int i = 0; i < col.length; i++) {
+    col[i].color_rect();
+    rect(1000+i*30, 20, 20, 20);
+  }
+  fill(255);
+  textSize(20);
+  text("low tone", 900, 20, 100, 40);//文字表示
+  text("high tone", 1670, 20, 100, 40);//文字表示  
+}
+
+ void note_recorder(){
+  if ((note_x>=0) && (note_y>=0)) {//音が入力されていることが前提
+    for (int i=0; i<note_x; i++) {//現在演奏している段落のみの色表示
+      col[note[note_y][i].getNote(0)].color_rect();//最初の音のずれの色を採用
+      rect(note[note_y][i].getX(), 250+212*note_y, 20, 20);//音のずれを表示
+    }
+    for (int j = 0; j <= note_y-1; j++) {
+      for (int i = 0; i < 8; i++) {//現在演奏しているよりも前の色表示
+        col[note[j][i].getNote(0)].color_rect();//最初の音のずれの色を採用
+        rect(note[note_y][i].getX(), 250+212*j, 20, 20);//音のずれを表示
+      }
+    }
+  }
  }
+ 
+  void judgement(){
+  if ((note_x>=0) && (note_y>=0)) {//音が入力されていることが前提
+    for (int i=0; i<note_x; i++) {//現在演奏している段落のみの色表示
+      if (note[note_y][i].judge>=1) {
+        fill(255);
+        textSize(25);
+        text("×", note[note_y][i].getX(), 67+212*note_y, 40, 40);
+      }
+    }
+    for (int j = 0; j <= note_y-1; j++) {
+      for (int i = 0; i < 8; i++) {//現在演奏しているよりも前の色表示
+       if (note[j][i].judge>=1) {
+          fill(255);
+          textSize(25);
+          text("×", note[note_y][i].getX(), 67+212*j, 40, 40);
+        }
+      }
+    }
+  }
+}
+}
+

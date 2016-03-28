@@ -1,7 +1,7 @@
 class Tab{
  private int x;
  private int y;
- private int number=0;
+ public int number=0;
 
  Tab(int x, int y){
  	this.x = x;

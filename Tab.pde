@@ -1,12 +1,13 @@
 class Tab{
  private int x;
  private int y;
- public int number=0;
-
- Tab(int x, int y){
+ public int number = 0;
+ 
+  Tab(int x, int y){
  	this.x = x;
  	this.y = y;
  }
+
 public int getX() {
     return this.x;
   }
@@ -24,6 +25,7 @@ public int getY() {
     rect(x, y, 200, 60); 
     }
   }
+
   void tab_text(){ //それぞれのタブのテキスト部分
   	fill(255);
     textSize(12);
@@ -45,7 +47,6 @@ public int getY() {
   	fill(255);
   	text("This mode teaches only false position.", 80, 1000);
   }
-  //println("Number:"+number);
   }
 
   void mousePressed() {
@@ -55,5 +56,4 @@ public int getY() {
   }
 }
 
-  
 }

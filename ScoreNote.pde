@@ -114,7 +114,7 @@ void color_example(){//右上の色の見本を表示
     }
   }
  }
- 
+
   void judgement(){
   if ((note_x>=0) && (note_y>=0)) {//音が入力されていることが前提
     for (int i=0; i<note_x; i++) {//現在演奏している段落のみの色表示
@@ -135,5 +135,16 @@ void color_example(){//右上の色の見本を表示
     }
   }
 }
-}
 
+void sum_false(){
+  int sum = 0;
+  for (int i = 0; i < note.length; i++) {
+    for (int j=0; j < note[i].length-1; j++) {
+      if (note[i][j].judge >=1) {
+        sum++;
+      }
+      println(""+sum);
+    }
+  }
+}
+}

@@ -188,6 +188,9 @@ note[note_y][note_x].real_time_color();
 note[note_y][note_x].note_recorder();//音のずれ
  note[note_y][note_x].judgement();//×をつける
 
+//ミスの回数
+note[note_y][note_x].sum_false();
+
 //Tabの動きを管理
  tab_true.tab_color();//正確なポジショニングを示すTabの色の状態
  tab_true.tab_text();//正確なポジショニングを示すTabの文章を管理

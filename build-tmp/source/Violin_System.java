@@ -211,6 +211,9 @@ note[note_y][note_x].real_time_color();
 note[note_y][note_x].note_recorder();//\u97f3\u306e\u305a\u308c
  note[note_y][note_x].judgement();//\u00d7\u3092\u3064\u3051\u308b
 
+//\u30df\u30b9\u306e\u56de\u6570
+note[note_y][note_x].sum_false();
+
 //Tab\u306e\u52d5\u304d\u3092\u7ba1\u7406
  tab_true.tab_color();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
  tab_true.tab_text();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
@@ -432,7 +435,7 @@ public void color_example(){//\u53f3\u4e0a\u306e\u8272\u306e\u898b\u672c\u3092\u
     }
   }
  }
- 
+
   public void judgement(){
   if ((note_x>=0) && (note_y>=0)) {//\u97f3\u304c\u5165\u529b\u3055\u308c\u3066\u3044\u308b\u3053\u3068\u304c\u524d\u63d0
     for (int i=0; i<note_x; i++) {//\u73fe\u5728\u6f14\u594f\u3057\u3066\u3044\u308b\u6bb5\u843d\u306e\u307f\u306e\u8272\u8868\u793a
@@ -453,17 +456,29 @@ public void color_example(){//\u53f3\u4e0a\u306e\u8272\u306e\u898b\u672c\u3092\u
     }
   }
 }
-}
 
+public void sum_false(){
+  int sum = 0;
+  for (int i = 0; i < note.length; i++) {
+    for (int j=0; j < note[i].length-1; j++) {
+      if (note[i][j].judge >=1) {
+        sum++;
+      }
+      println(""+sum);
+    }
+  }
+}
+}
 class Tab{
  private int x;
  private int y;
- public int number=0;
-
- Tab(int x, int y){
+ public int number = 0;
+ 
+  Tab(int x, int y){
  	this.x = x;
  	this.y = y;
  }
+
 public int getX() {
     return this.x;
   }
@@ -481,6 +496,7 @@ public int getY() {
     rect(x, y, 200, 60); 
     }
   }
+
   public void tab_text(){ //\u305d\u308c\u305e\u308c\u306e\u30bf\u30d6\u306e\u30c6\u30ad\u30b9\u30c8\u90e8\u5206
   	fill(255);
     textSize(12);
@@ -502,7 +518,6 @@ public int getY() {
   	fill(255);
   	text("This mode teaches only false position.", 80, 1000);
   }
-  //println("Number:"+number);
   }
 
   public void mousePressed() {
@@ -512,7 +527,6 @@ public int getY() {
   }
 }
 
-  
 }
   public void settings() {  fullScreen(P2D); }
   static public void main(String[] passedArgs) {

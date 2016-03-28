@@ -34,6 +34,9 @@ PImage all_score, part_score, left_grad, right_grad; //\u5168\u4f53\u697d\u8b5c,
 //\u4e3b\u306b\u697d\u8b5c\u306e\u97f3\u3092\u7ba1\u7406\u3059\u308b\u7528
 ScoreNote[][]note = new ScoreNote[4][8];//note[y\u8ef8\u5411\u304d\u306b\u6bb5\u6570][x\u8ef8\u5411\u304d\u306b\u97f3\u6570
 int note_y, note_x = 0;
+boolean move = false;
+float score_top = 90.0f;
+float moving = 0.0f;
 
 //\u8272\u3092\u7ba1\u7406\u3059\u308b\u7528
 Color []col = new Color[22];//\u8272\u309222\u8272\u306e\u914d\u5217\u3067\u7ba1\u7406
@@ -191,12 +194,11 @@ video.read();
   popMatrix();
 
 //\u697d\u8b5c\u306e\u8868\u793a
- image(all_score, 800, 100, 1200, 741);//\u5168\u4f53\u697d\u8b5c\u3092\u914d\u7f6e
+ 
  //image(part_score, 90, 50, 4559, 148);//\u697d\u8b5c\u306e\u4e00\u6bb5\u843d\u3092\u914d\u7f6e
- part_score = part_score.get(0,0,680,148);//\u697d\u8b5c\u306e\u4e00\u6bb5\u843d\u306e\u3046\u3061\u5f3e\u3044\u3066\u3044\u308b\u7b87\u6240\u306e\u307f\u5207\u308a\u629c\u304d
- image(part_score,90,50,680,148);//\u5207\u308a\u629c\u3044\u305f\u697d\u8b5c\u3092\u8868\u793a
- image(left_grad, 70, 40, 88, 178); //\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3\u5de6\u3092\u914d\u7f6e
- image(right_grad, 700, 40, 88, 178);//\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3\u53f3\u3092\u914d\u7f6e
+ note[note_y][note_x].move_score();//\u697d\u8b5c\u306e\u4e00\u6bb5\u843d\u306e\u3046\u3061\u5f3e\u3044\u3066\u3044\u308b\u7b87\u6240\u306e\u307f\u5207\u308a\u629c\u304d
+ //image(part_score,90,50,680,148);//\u5207\u308a\u629c\u3044\u305f\u697d\u8b5c\u3092\u8868\u793a
+ image(all_score, 800, 100, 1200, 741);//\u5168\u4f53\u697d\u8b5c\u3092\u914d\u7f6e
 
 //\u697d\u8b5c\u306e\u6c34\u8272\u25bc\u3092\u8868\u793a
 note[note_y][note_x].blue_triangle(); 
@@ -212,11 +214,11 @@ note[note_y][note_x].note_recorder();//\u97f3\u306e\u305a\u308c
  note[note_y][note_x].judgement();//\u00d7\u3092\u3064\u3051\u308b
 
 //\u30df\u30b9\u306e\u56de\u6570
-note[note_y][note_x].sum_false();
+note[note_y][note_x].sum_false();//\u30df\u30b9\u306e\u30ab\u30a6\u30f3\u30c8\u3068\u30c6\u30ad\u30b9\u30c8\u3092\u8868\u793a
 
 //\u30dd\u30a4\u30f3\u30bf\u30fc\u8868\u793a
-(note[note_y][note_x].pointer()).point();
-(note[note_y][note_x].pointer()).string_point();
+(note[note_y][note_x].pointer()).point();//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u793a\u3059\u8d64\u7dda\u7528
+(note[note_y][note_x].pointer()).string_point();//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u793a\u3059\u9752\u7dda\u7528
 //Tab\u306e\u52d5\u304d\u3092\u7ba1\u7406
  tab_true.tab_color();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
  tab_true.tab_text();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
@@ -255,6 +257,7 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     }
     if ((int)(data[1] & 0xFF)==(note[note_y][note_x].pointer()).MidiValue()) {
       note_x++;
+      move = true;
       if (note_x!=0&&note_x==8) {
         note_y++;
         note_x=0;
@@ -322,18 +325,17 @@ class Pointer{
   	return this.pos_y;
   }
 
-  public void point(){
+  public void point(){//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u8d64\u7dda\u3067\u8868\u793a
     stroke(255, 0, 0);
     line(110,(note[note_y][note_x].pointer()).pos_y, 650, (note[note_y][note_x].pointer()).pos_y);
   }
-
-  public void string_point(){
+  public void string_point(){//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u9752\u7dda\u3067\u8868\u793a
     if(((note[note_y][note_x].pointer()).midi_value >= 69) && ((note[note_y][note_x].pointer()).midi_value < 75)){
-     stroke(0, 255, 0);
+     stroke(0, 0, 255);
       line(431,365,452, 893);
     }
     if(((note[note_y][note_x].pointer()).midi_value >= 75) && ((note[note_y][note_x].pointer()).midi_value < 82)){
-  stroke(0, 255, 0);
+  stroke(0, 0, 255);
       line(448,365,470, 893);
   }
   }
@@ -489,6 +491,27 @@ public void sum_false(){
     fill(255);
     textSize(25);
     text(sum+"/32", 1000, 955);
+}
+
+public void move_score(){
+   if ((note_x>=0) &&(note_y>=0)) {
+    if ((move == true)) {
+      moving+=0.04f;
+    }
+    if (moving >= 3.35f) {
+      moving = 0.0f;
+      move = false;
+    }
+  }
+  score_top = score_top - moving;
+  
+  image(part_score, score_top, 50, 4559, 148);//\u79fb\u52d5\u3059\u308b\u697d\u8b5c\u306e\u7b2c1\u9023
+  noStroke();
+  fill(0);
+  rect(0,40,70,218);
+  rect(700,40,displayWidth-700,218);
+  image(left_grad, 70, 40, 88, 178); //\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3\u5de6\u3092\u914d\u7f6e
+ image(right_grad, 700, 40, 88, 178);//\u30b0\u30e9\u30c7\u30fc\u30b7\u30e7\u30f3\u53f3\u3092\u914d\u7f6e
 }
 }
 class Tab{

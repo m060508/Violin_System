@@ -11,6 +11,9 @@ PImage all_score, part_score, left_grad, right_grad; //全体楽譜, 楽譜の�
 //主に楽譜の音を管理する用
 ScoreNote[][]note = new ScoreNote[4][8];//note[y軸向きに段数][x軸向きに音数
 int note_y, note_x = 0;
+boolean move = false;
+float score_top = 90.0;
+float moving = 0.0;
 
 //色を管理する用
 Color []col = new Color[22];//色を22色の配列で管理
@@ -168,12 +171,11 @@ video.read();
   popMatrix();
 
 //楽譜の表示
- image(all_score, 800, 100, 1200, 741);//全体楽譜を配置
+ 
  //image(part_score, 90, 50, 4559, 148);//楽譜の一段落を配置
- part_score = part_score.get(0,0,680,148);//楽譜の一段落のうち弾いている箇所のみ切り抜き
- image(part_score,90,50,680,148);//切り抜いた楽譜を表示
- image(left_grad, 70, 40, 88, 178); //グラデーション左を配置
- image(right_grad, 700, 40, 88, 178);//グラデーション右を配置
+ note[note_y][note_x].move_score();//楽譜の一段落のうち弾いている箇所のみ切り抜き
+ //image(part_score,90,50,680,148);//切り抜いた楽譜を表示
+ image(all_score, 800, 100, 1200, 741);//全体楽譜を配置
 
 //楽譜の水色▼を表示
 note[note_y][note_x].blue_triangle(); 
@@ -189,11 +191,11 @@ note[note_y][note_x].note_recorder();//音のずれ
  note[note_y][note_x].judgement();//×をつける
 
 //ミスの回数
-note[note_y][note_x].sum_false();
+note[note_y][note_x].sum_false();//ミスのカウントとテキストを表示
 
 //ポインター表示
-(note[note_y][note_x].pointer()).point();
-(note[note_y][note_x].pointer()).string_point();
+(note[note_y][note_x].pointer()).point();//抑えるべき位置を示す赤線用
+(note[note_y][note_x].pointer()).string_point();//抑えるべき弦を示す青線用
 //Tabの動きを管理
  tab_true.tab_color();//正確なポジショニングを示すTabの色の状態
  tab_true.tab_text();//正確なポジショニングを示すTabの文章を管理
@@ -232,6 +234,7 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     }
     if ((int)(data[1] & 0xFF)==(note[note_y][note_x].pointer()).MidiValue()) {
       note_x++;
+      move = true;
       if (note_x!=0&&note_x==8) {
         note_y++;
         note_x=0;

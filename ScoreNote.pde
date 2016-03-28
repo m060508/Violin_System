@@ -150,4 +150,25 @@ void sum_false(){
     textSize(25);
     text(sum+"/32", 1000, 955);
 }
+
+void move_score(){
+   if ((note_x>=0) &&(note_y>=0)) {
+    if ((move == true)) {
+      moving+=0.04;
+    }
+    if (moving >= 3.35) {
+      moving = 0.0;
+      move = false;
+    }
+  }
+  score_top = score_top - moving;
+  
+  image(part_score, score_top, 50, 4559, 148);//移動する楽譜の第1連
+  noStroke();
+  fill(0);
+  rect(0,40,70,218);
+  rect(700,40,displayWidth-700,218);
+  image(left_grad, 70, 40, 88, 178); //グラデーション左を配置
+ image(right_grad, 700, 40, 88, 178);//グラデーション右を配置
+}
 }

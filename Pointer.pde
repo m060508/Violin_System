@@ -19,12 +19,11 @@ class Pointer{
   	return this.pos_y;
   }
 
-  void point(){
+  void point(){//抑えるべき位置を赤線で表示
     stroke(255, 0, 0);
     line(110,(note[note_y][note_x].pointer()).pos_y, 650, (note[note_y][note_x].pointer()).pos_y);
   }
-
-  void string_point(){
+  void string_point(){//抑えるべき弦を青線で表示
     if(((note[note_y][note_x].pointer()).midi_value >= 69) && ((note[note_y][note_x].pointer()).midi_value < 75)){
      stroke(0, 0, 255);
       line(431,365,452, 893);

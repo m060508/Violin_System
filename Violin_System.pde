@@ -135,7 +135,7 @@ void setup() {
   tab_false = new Tab(450, 920);//Tabの虚偽ver
  
  //midibusを管理
-  myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
+ myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
   myBus.sendNoteOff(channel, pitch, velocity); // Send a Midi nodeOff
   myBus.sendMessage(status_byte, channel_byte, first_byte, second_byte);
   myBus.sendMessage(

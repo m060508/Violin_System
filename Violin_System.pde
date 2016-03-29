@@ -135,7 +135,7 @@ void setup() {
   tab_false = new Tab(450, 920);//Tabの虚偽ver
  
  //midibusを管理
- myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
+  myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
   myBus.sendNoteOff(channel, pitch, velocity); // Send a Midi nodeOff
   myBus.sendMessage(status_byte, channel_byte, first_byte, second_byte);
   myBus.sendMessage(
@@ -195,6 +195,7 @@ note[note_y][note_x].note_recorder();//音のずれ
 note[note_y][note_x].sum_false();//ミスのカウントとテキストを表示
 
 //Tabの動きを管理
+pushMatrix();
  tab_true.tab_color();//正確なポジショニングを示すTabの色の状態
  tab_true.tab_text();//正確なポジショニングを示すTabの文章を管理
  tab_true.mousePressed();//正確なポジショニングを示すマウスクリックされた時の範囲を管理
@@ -206,6 +207,7 @@ note[note_y][note_x].sum_false();//ミスのカウントとテキストを表示
  tab_false.tab_color();//虚偽のポジショニングを示すTabの色の状態
  tab_false.tab_text();//虚偽のポジショニングを示すTabの文章を管理
  tab_false.mousePressed();//虚偽のポジショニングを示すマウスクリックされた時の範囲を管理
+ popMatrix();
 }
 
 //midibusを管理している

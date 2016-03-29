@@ -83,7 +83,7 @@ public void addNote(int n)
   }
 
 void real_time_color(){//リアルタイムで変化する音の色を表示
-  if (note[note_y][note_x].played_note.size()>0) {
+  if (note[note_y][note_x].played_note.size()>=1) {
     col[note[note_y][note_x].getNote(note[note_y][note_x].played_note.size()-1)].color_rect();
     rect(200, 160, 30, 30);
   }
@@ -103,12 +103,22 @@ void color_example(){//右上の色の見本を表示
  void note_recorder(){
   if ((note_x>=0) && (note_y>=0)) {//音が入力されていることが前提
     for (int i=0; i<note_x; i++) {//現在演奏している段落のみの色表示
+      try{
       col[note[note_y][i].getNote(0)].color_rect();//最初の音のずれの色を採用
+      }
+      catch (NullPointerException e){
+        fill(87, 175, 79);
+      }
+      
       rect(note[note_y][i].getX(), 250+212*note_y, 20, 20);//音のずれを表示
     }
     for (int j = 0; j <= note_y-1; j++) {
       for (int i = 0; i < 8; i++) {//現在演奏しているよりも前の色表示
+        try{
         col[note[j][i].getNote(0)].color_rect();//最初の音のずれの色を採用
+      }catch (NullPointerException e){
+        fill(87, 175, 79);
+      }
         rect(note[note_y][i].getX(), 250+212*j, 20, 20);//音のずれを表示
       }
     }

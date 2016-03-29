@@ -158,7 +158,7 @@ public void setup() {
   tab_false = new Tab(450, 920);//Tab\u306e\u865a\u507dver
  
  //midibus\u3092\u7ba1\u7406
- myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
+  myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
   myBus.sendNoteOff(channel, pitch, velocity); // Send a Midi nodeOff
   myBus.sendMessage(status_byte, channel_byte, first_byte, second_byte);
   myBus.sendMessage(
@@ -218,6 +218,7 @@ note[note_y][note_x].note_recorder();//\u97f3\u306e\u305a\u308c
 note[note_y][note_x].sum_false();//\u30df\u30b9\u306e\u30ab\u30a6\u30f3\u30c8\u3068\u30c6\u30ad\u30b9\u30c8\u3092\u8868\u793a
 
 //Tab\u306e\u52d5\u304d\u3092\u7ba1\u7406
+pushMatrix();
  tab_true.tab_color();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
  tab_true.tab_text();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
  tab_true.mousePressed();//\u6b63\u78ba\u306a\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3055\u308c\u305f\u6642\u306e\u7bc4\u56f2\u3092\u7ba1\u7406
@@ -229,6 +230,7 @@ note[note_y][note_x].sum_false();//\u30df\u30b9\u306e\u30ab\u30a6\u30f3\u30c8\u3
  tab_false.tab_color();//\u865a\u507d\u306e\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u8272\u306e\u72b6\u614b
  tab_false.tab_text();//\u865a\u507d\u306e\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059Tab\u306e\u6587\u7ae0\u3092\u7ba1\u7406
  tab_false.mousePressed();//\u865a\u507d\u306e\u30dd\u30b8\u30b7\u30e7\u30cb\u30f3\u30b0\u3092\u793a\u3059\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3055\u308c\u305f\u6642\u306e\u7bc4\u56f2\u3092\u7ba1\u7406
+ popMatrix();
 }
 
 //midibus\u3092\u7ba1\u7406\u3057\u3066\u3044\u308b
@@ -495,7 +497,7 @@ public void addNote(int n)
   }
 
 public void real_time_color(){//\u30ea\u30a2\u30eb\u30bf\u30a4\u30e0\u3067\u5909\u5316\u3059\u308b\u97f3\u306e\u8272\u3092\u8868\u793a
-  if (note[note_y][note_x].played_note.size()>0) {
+  if (note[note_y][note_x].played_note.size()>=1) {
     col[note[note_y][note_x].getNote(note[note_y][note_x].played_note.size()-1)].color_rect();
     rect(200, 160, 30, 30);
   }
@@ -515,12 +517,22 @@ public void color_example(){//\u53f3\u4e0a\u306e\u8272\u306e\u898b\u672c\u3092\u
  public void note_recorder(){
   if ((note_x>=0) && (note_y>=0)) {//\u97f3\u304c\u5165\u529b\u3055\u308c\u3066\u3044\u308b\u3053\u3068\u304c\u524d\u63d0
     for (int i=0; i<note_x; i++) {//\u73fe\u5728\u6f14\u594f\u3057\u3066\u3044\u308b\u6bb5\u843d\u306e\u307f\u306e\u8272\u8868\u793a
+      try{
       col[note[note_y][i].getNote(0)].color_rect();//\u6700\u521d\u306e\u97f3\u306e\u305a\u308c\u306e\u8272\u3092\u63a1\u7528
+      }
+      catch (NullPointerException e){
+        fill(87, 175, 79);
+      }
+      
       rect(note[note_y][i].getX(), 250+212*note_y, 20, 20);//\u97f3\u306e\u305a\u308c\u3092\u8868\u793a
     }
     for (int j = 0; j <= note_y-1; j++) {
       for (int i = 0; i < 8; i++) {//\u73fe\u5728\u6f14\u594f\u3057\u3066\u3044\u308b\u3088\u308a\u3082\u524d\u306e\u8272\u8868\u793a
+        try{
         col[note[j][i].getNote(0)].color_rect();//\u6700\u521d\u306e\u97f3\u306e\u305a\u308c\u306e\u8272\u3092\u63a1\u7528
+      }catch (NullPointerException e){
+        fill(87, 175, 79);
+      }
         rect(note[note_y][i].getX(), 250+212*j, 20, 20);//\u97f3\u306e\u305a\u308c\u3092\u8868\u793a
       }
     }
@@ -615,8 +627,8 @@ public int getY() {
   public void tab_text(){ //\u305d\u308c\u305e\u308c\u306e\u30bf\u30d6\u306e\u30c6\u30ad\u30b9\u30c8\u90e8\u5206
   	fill(255);
     textSize(12);
-  	text("mouseX:"+mouseX, 40,40, 90,60);
-  	text("mouseY:"+mouseY, 40,60, 90,60);
+  //	text("mouseX:"+mouseX, 40,40, 90,60);
+  //	text("mouseY:"+mouseY, 40,60, 90,60);
   	text("True Position Learning", 80, 955);
     text("Ambiguous Position Learning", 270, 955);
     text("false Position Learning", 480, 955);
@@ -624,20 +636,20 @@ public int getY() {
     if(number == 0){//tab_true\u304c\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af\u3055\u308c\u305f\u6642
   	fill(255);
   	text("This mode teaches only true position.", 80, 1000);
-    (note[note_y][note_x].pointer()).point();//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u793a\u3059\u8d64\u7dda\u7528
     (note[note_y][note_x].pointer()).string_point();//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u793a\u3059\u9752\u7dda\u7528
+    (note[note_y][note_x].pointer()).point();//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u793a\u3059\u30dd\u30a4\u30f3\u30bf\u7528
   }
   else if(number == 1){//tab_ambiguous\u304c\u3055\u308c\u305f\u6642	
   	fill(255);
   	text("This mode teaches true position and false position.", 80, 1000);
-    (note[note_y][note_x].pointer()).point();//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u793a\u3059\u8d64\u7dda\u7528
     (note[note_y][note_x].pointer()).string_point();//\u6291\u3048\u308b\u3079\u304d\u5f26\u3092\u793a\u3059\u9752\u7dda\u7528
+    (note[note_y][note_x].pointer()).point();//\u6291\u3048\u308b\u3079\u304d\u4f4d\u7f6e\u3092\u793a\u3059\u30dd\u30a4\u30f3\u30bf\u7528
     (note[note_y][note_x].pointer()).ambiguous_point();//\u66d6\u6627\u60c5\u5831\u3092\u7e54\u308a\u4ea4\u305c\u305f\u8d64\u7dda\u7528
   }
   else if(number == 2){//tab_false\u304c\u30de\u30a6\u30b9\u30af\u30ea\u30c3\u30af	\u3055\u308c\u305f\u6642	
   	fill(255);
   	text("This mode teaches only false position.", 80, 1000);
-    (note[note_y][note_x].pointer()).false_point();
+    (note[note_y][note_x].pointer()).false_point();//\u5f26\u3001\u30dd\u30a4\u30f3\u30bf\u3082\u542b\u3081\u305f\u865a\u507d\u60c5\u5831
   }
   }
 

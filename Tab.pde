@@ -29,8 +29,8 @@ public int getY() {
   void tab_text(){ //それぞれのタブのテキスト部分
   	fill(255);
     textSize(12);
-  	text("mouseX:"+mouseX, 40,40, 90,60);
-  	text("mouseY:"+mouseY, 40,60, 90,60);
+  //	text("mouseX:"+mouseX, 40,40, 90,60);
+  //	text("mouseY:"+mouseY, 40,60, 90,60);
   	text("True Position Learning", 80, 955);
     text("Ambiguous Position Learning", 270, 955);
     text("false Position Learning", 480, 955);
@@ -38,20 +38,20 @@ public int getY() {
     if(number == 0){//tab_trueがマウスクリックされた時
   	fill(255);
   	text("This mode teaches only true position.", 80, 1000);
-    (note[note_y][note_x].pointer()).point();//抑えるべき位置を示す赤線用
     (note[note_y][note_x].pointer()).string_point();//抑えるべき弦を示す青線用
+    (note[note_y][note_x].pointer()).point();//抑えるべき位置を示すポインタ用
   }
   else if(number == 1){//tab_ambiguousがされた時	
   	fill(255);
   	text("This mode teaches true position and false position.", 80, 1000);
-    (note[note_y][note_x].pointer()).point();//抑えるべき位置を示す赤線用
     (note[note_y][note_x].pointer()).string_point();//抑えるべき弦を示す青線用
+    (note[note_y][note_x].pointer()).point();//抑えるべき位置を示すポインタ用
     (note[note_y][note_x].pointer()).ambiguous_point();//曖昧情報を織り交ぜた赤線用
   }
   else if(number == 2){//tab_falseがマウスクリック	された時	
   	fill(255);
   	text("This mode teaches only false position.", 80, 1000);
-    (note[note_y][note_x].pointer()).false_point();
+    (note[note_y][note_x].pointer()).false_point();//弦、ポインタも含めた虚偽情報
   }
   }
 

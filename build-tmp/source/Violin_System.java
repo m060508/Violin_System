@@ -53,14 +53,13 @@ float mill;//\u6642\u9593\u7528
 int note_num;//\u5f3e\u304f\u3079\u304d\u97f3\u756a\u53f7
 int now_num;//\u4eca\u73fe\u5728\u5f3e\u3044\u3066\u3044\u308b\u97f3
 int note_vel;//\u30d9\u30ed\u30b7\u30c6\u30a3
-Tab tab_num;
 
 //\u8272\u3092\u7ba1\u7406\u3059\u308b\u7528
 Color []col = new Color[22];//\u8272\u309222\u8272\u306e\u914d\u5217\u3067\u7ba1\u7406
 
 //\u30bf\u30d6\u3092\u7ba1\u7406\u3059\u308b\u305f\u3081\u306e\u5909\u6570
 Tab tab_true, tab_ambiguous, tab_false;//\u30bf\u30d6
-int number = 0;
+int number = 0; //tab\u306e\u756a\u53f7
 
 //web\u30ab\u30e1\u30e9\u7528
 Capture video;  //Capture\u578b\u306e\u5909\u6570video\u3092\u5ba3\u8a00
@@ -174,7 +173,6 @@ public void setup() {
   tab_true = new Tab(50, 920);//Tab\u306e\u6b63\u78baver
   tab_ambiguous = new Tab(250, 920);//Tab\u306e\u66d6\u6627ver
   tab_false = new Tab(450, 920);//Tab\u306e\u865a\u507dver
-  tab_num = new Tab(0, 0);
 
  //midibus\u3092\u7ba1\u7406
  myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
@@ -303,9 +301,7 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     count.add(""+mill);
     note_velocity.add(Integer.toString(note_vel));
     pitche_bend.add(Integer.toString(notebus_different));
-    int num = tab_num.getNumber(0);
-    println("num"+num);
-    tab_number.add(Integer.toString(num));
+    tab_number.add(Integer.toString(number));
   }
     flag = false;
   }

@@ -30,14 +30,13 @@ float mill;//時間用
 int note_num;//弾くべき音番号
 int now_num;//今現在弾いている音
 int note_vel;//ベロシティ
-Tab tab_num;
 
 //色を管理する用
 Color []col = new Color[22];//色を22色の配列で管理
 
 //タブを管理するための変数
 Tab tab_true, tab_ambiguous, tab_false;//タブ
-int number = 0;
+int number = 0; //tabの番号
 
 //webカメラ用
 Capture video;  //Capture型の変数videoを宣言
@@ -151,7 +150,6 @@ void setup() {
   tab_true = new Tab(50, 920);//Tabの正確ver
   tab_ambiguous = new Tab(250, 920);//Tabの曖昧ver
   tab_false = new Tab(450, 920);//Tabの虚偽ver
-  tab_num = new Tab(0, 0);
 
  //midibusを管理
  myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
@@ -280,9 +278,7 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     count.add(""+mill);
     note_velocity.add(Integer.toString(note_vel));
     pitche_bend.add(Integer.toString(notebus_different));
-    int num = tab_num.getNumber(0);
-    println("num"+num);
-    tab_number.add(Integer.toString(num));
+    tab_number.add(Integer.toString(number));
   }
     flag = false;
   }

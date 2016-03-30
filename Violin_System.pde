@@ -15,6 +15,17 @@ boolean move = false;
 float score_top = 90.0;
 float moving = 0.0;
 
+//時刻
+boolean flag = false;
+
+//txtファイル出力に必要な配列
+ArrayList<String> note_number = new ArrayList<String>();
+ArrayList<String> now_number = new ArrayList<String>();
+ArrayList<String> count = new ArrayList<String>();
+ArrayList<String> result = new ArrayList<String>();
+float mill;
+int note_num;
+
 //色を管理する用
 Color []col = new Color[22];//色を22色の配列で管理
 
@@ -161,18 +172,20 @@ void setup() {
 void draw(){
  background(0);
 
+//秒数をカウント
+ mill = millis(); 
+
  //カメラの調整と表示
-video.read();
+ video.read();
 
 //カメラ映像を回転させて、演奏者の見ているものと同じ映像にする
-  pushMatrix(); 
-  translate(100, 900);
-  rotate(radians(-90));
-  image(video, 10, 10, 640, 540);
-  popMatrix();
+ pushMatrix(); 
+ translate(100, 900);
+ rotate(radians(-90));
+ image(video, 10, 10, 640, 540);
+ popMatrix();
 
-//楽譜の表示
- 
+ //楽譜の表示
  //image(part_score, 90, 50, 4559, 148);//楽譜の一段落を配置
  note[note_y][note_x].move_score();//楽譜の一段落のうち弾いている箇所のみ切り抜き
  //image(part_score,90,50,680,148);//切り抜いた楽譜を表示
@@ -229,6 +242,14 @@ if (((int)(data[0] & 0xFF) >= 144)&&((int)(data[0] & 0xFF) <= 171)) {
   }
 if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     println();
+    flag = true;
+    note_num = (int)(data[1] & 0xFF);
+    if(flag == true){
+    note_number.add(Integer.toString((note[note_y][note_x].pointer()).MidiValue()));
+    now_number.add(Integer.toString(note_num));
+    count.add(""+mill);
+    flag = false;
+ }
  if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {
     note[note_y][note_x].judge = 1;      
     }
@@ -255,4 +276,15 @@ void captureEvent(Capture video) {
 void mouseClicked() {
   println("x"+mouseX+" "+"y"+mouseY);
   return;
+}
+
+void keyPressed() {
+  if (key == 's' || key=='S') { 
+  //txtファイル用
+  //それぞれの行に文字列をファイルへ書き込む。
+  for(int i = 0; i < count.size() ; i++){
+  result.add(note_number.get(i) + "," + now_number.get(i) + "," + count.get(i));
+}
+  saveStrings("violin_system_data.txt", (String[])result.toArray(new String[result.size()-1])); 
+}
 }

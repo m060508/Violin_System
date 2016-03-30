@@ -38,6 +38,17 @@ boolean move = false;
 float score_top = 90.0f;
 float moving = 0.0f;
 
+//\u6642\u523b
+boolean flag = false;
+
+//txt\u30d5\u30a1\u30a4\u30eb\u51fa\u529b\u306b\u5fc5\u8981\u306a\u914d\u5217
+ArrayList<String> note_number = new ArrayList<String>();
+ArrayList<String> now_number = new ArrayList<String>();
+ArrayList<String> count = new ArrayList<String>();
+ArrayList<String> result = new ArrayList<String>();
+float mill;
+int note_num;
+
 //\u8272\u3092\u7ba1\u7406\u3059\u308b\u7528
 Color []col = new Color[22];//\u8272\u309222\u8272\u306e\u914d\u5217\u3067\u7ba1\u7406
 
@@ -184,18 +195,20 @@ public void setup() {
 public void draw(){
  background(0);
 
+//\u79d2\u6570\u3092\u30ab\u30a6\u30f3\u30c8
+ mill = millis(); 
+
  //\u30ab\u30e1\u30e9\u306e\u8abf\u6574\u3068\u8868\u793a
-video.read();
+ video.read();
 
 //\u30ab\u30e1\u30e9\u6620\u50cf\u3092\u56de\u8ee2\u3055\u305b\u3066\u3001\u6f14\u594f\u8005\u306e\u898b\u3066\u3044\u308b\u3082\u306e\u3068\u540c\u3058\u6620\u50cf\u306b\u3059\u308b
-  pushMatrix(); 
-  translate(100, 900);
-  rotate(radians(-90));
-  image(video, 10, 10, 640, 540);
-  popMatrix();
+ pushMatrix(); 
+ translate(100, 900);
+ rotate(radians(-90));
+ image(video, 10, 10, 640, 540);
+ popMatrix();
 
-//\u697d\u8b5c\u306e\u8868\u793a
- 
+ //\u697d\u8b5c\u306e\u8868\u793a
  //image(part_score, 90, 50, 4559, 148);//\u697d\u8b5c\u306e\u4e00\u6bb5\u843d\u3092\u914d\u7f6e
  note[note_y][note_x].move_score();//\u697d\u8b5c\u306e\u4e00\u6bb5\u843d\u306e\u3046\u3061\u5f3e\u3044\u3066\u3044\u308b\u7b87\u6240\u306e\u307f\u5207\u308a\u629c\u304d
  //image(part_score,90,50,680,148);//\u5207\u308a\u629c\u3044\u305f\u697d\u8b5c\u3092\u8868\u793a
@@ -252,6 +265,14 @@ if (((int)(data[0] & 0xFF) >= 144)&&((int)(data[0] & 0xFF) <= 171)) {
   }
 if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     println();
+    flag = true;
+    note_num = (int)(data[1] & 0xFF);
+    if(flag == true){
+    note_number.add(Integer.toString((note[note_y][note_x].pointer()).MidiValue()));
+    now_number.add(Integer.toString(note_num));
+    count.add(""+mill);
+    flag = false;
+ }
  if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {
     note[note_y][note_x].judge = 1;      
     }
@@ -278,6 +299,17 @@ public void captureEvent(Capture video) {
 public void mouseClicked() {
   println("x"+mouseX+" "+"y"+mouseY);
   return;
+}
+
+public void keyPressed() {
+  if (key == 's' || key=='S') { 
+  //txt\u30d5\u30a1\u30a4\u30eb\u7528
+  //\u305d\u308c\u305e\u308c\u306e\u884c\u306b\u6587\u5b57\u5217\u3092\u30d5\u30a1\u30a4\u30eb\u3078\u66f8\u304d\u8fbc\u3080\u3002
+  for(int i = 0; i < count.size() ; i++){
+  result.add(note_number.get(i) + "," + now_number.get(i) + "," + count.get(i));
+}
+  saveStrings("violin_system_data.txt", (String[])result.toArray(new String[result.size()-1])); 
+}
 }
 class Color{ //\u97f3\u306e\u5909\u5316\u306e\u8272\u3092\u793a\u3059\u30af\u30e9\u30b9
   private int r;

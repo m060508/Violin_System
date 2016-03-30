@@ -22,9 +22,14 @@ boolean flag = false;
 ArrayList<String> note_number = new ArrayList<String>();
 ArrayList<String> now_number = new ArrayList<String>();
 ArrayList<String> count = new ArrayList<String>();
+ArrayList<String> note_velocity = new ArrayList<String>();
 ArrayList<String> result = new ArrayList<String>();
-float mill;
-int note_num;
+ArrayList<String> pitche_bend = new ArrayList<String>();
+
+float mill;//時間用
+int note_num;//弾くべき音番号
+int now_num;//今現在弾いている音
+int note_vel;//ベロシティ
 
 //色を管理する用
 Color []col = new Color[22];//色を22色の配列で管理
@@ -240,16 +245,15 @@ if (((int)(data[0] & 0xFF) >= 144)&&((int)(data[0] & 0xFF) <= 171)) {
     notebus_different=((data[1] & 0xFF)-(note[note_y][note_x].pointer()).MidiValue())*333+pitchbend-8192;
     note[note_y][note_x].addNote(notebus_different);
   }
+if(((int)(data[0] & 0xFF) >= 143)&&((int)(data[0] & 0xFF) <= 150)) {
+  //println("velocity:" +(int)(data[2] & 0xFF));
+  note_vel = (int)(data[2] & 0xFF);
+}
 if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     println();
-    flag = true;
-    note_num = (int)(data[1] & 0xFF);
-    if(flag == true){
-    note_number.add(Integer.toString((note[note_y][note_x].pointer()).MidiValue()));
-    now_number.add(Integer.toString(note_num));
-    count.add(""+mill);
-    flag = false;
- }
+    note_num = (note[note_y][note_x].pointer()).MidiValue();
+    now_num = (int)(data[1] & 0xFF);
+ 
  if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {
     note[note_y][note_x].judge = 1;      
     }
@@ -264,6 +268,17 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
         }
       }
     }
+  }
+  if((int)(data[0] & 0xFF) >= 0){
+    flag = true;
+    if(flag == true){
+    note_number.add(Integer.toString(note_num));
+    now_number.add(Integer.toString(now_num));
+    count.add(""+mill);
+    note_velocity.add(Integer.toString(note_vel));
+    pitche_bend.add(Integer.toString(notebus_different));
+  }
+    flag = false;
   }
 }
 
@@ -283,7 +298,7 @@ void keyPressed() {
   //txtファイル用
   //それぞれの行に文字列をファイルへ書き込む。
   for(int i = 0; i < count.size() ; i++){
-  result.add(note_number.get(i) + "," + now_number.get(i) + "," + count.get(i));
+  result.add(note_number.get(i) + "," + now_number.get(i) + "," + pitche_bend.get(i) + "," + note_velocity.get(i) + "," +count.get(i));
 }
   saveStrings("violin_system_data.txt", (String[])result.toArray(new String[result.size()-1])); 
 }

@@ -45,9 +45,14 @@ boolean flag = false;
 ArrayList<String> note_number = new ArrayList<String>();
 ArrayList<String> now_number = new ArrayList<String>();
 ArrayList<String> count = new ArrayList<String>();
+ArrayList<String> note_velocity = new ArrayList<String>();
 ArrayList<String> result = new ArrayList<String>();
-float mill;
-int note_num;
+ArrayList<String> pitche_bend = new ArrayList<String>();
+
+float mill;//\u6642\u9593\u7528
+int note_num;//\u5f3e\u304f\u3079\u304d\u97f3\u756a\u53f7
+int now_num;//\u4eca\u73fe\u5728\u5f3e\u3044\u3066\u3044\u308b\u97f3
+int note_vel;//\u30d9\u30ed\u30b7\u30c6\u30a3
 
 //\u8272\u3092\u7ba1\u7406\u3059\u308b\u7528
 Color []col = new Color[22];//\u8272\u309222\u8272\u306e\u914d\u5217\u3067\u7ba1\u7406
@@ -263,16 +268,15 @@ if (((int)(data[0] & 0xFF) >= 144)&&((int)(data[0] & 0xFF) <= 171)) {
     notebus_different=((data[1] & 0xFF)-(note[note_y][note_x].pointer()).MidiValue())*333+pitchbend-8192;
     note[note_y][note_x].addNote(notebus_different);
   }
+if(((int)(data[0] & 0xFF) >= 143)&&((int)(data[0] & 0xFF) <= 150)) {
+  //println("velocity:" +(int)(data[2] & 0xFF));
+  note_vel = (int)(data[2] & 0xFF);
+}
 if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     println();
-    flag = true;
-    note_num = (int)(data[1] & 0xFF);
-    if(flag == true){
-    note_number.add(Integer.toString((note[note_y][note_x].pointer()).MidiValue()));
-    now_number.add(Integer.toString(note_num));
-    count.add(""+mill);
-    flag = false;
- }
+    note_num = (note[note_y][note_x].pointer()).MidiValue();
+    now_num = (int)(data[1] & 0xFF);
+ 
  if ((int)(data[1] & 0xFF)!=(note[note_y][note_x].pointer()).MidiValue()) {
     note[note_y][note_x].judge = 1;      
     }
@@ -287,6 +291,17 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
         }
       }
     }
+  }
+  if((int)(data[0] & 0xFF) >= 0){
+    flag = true;
+    if(flag == true){
+    note_number.add(Integer.toString(note_num));
+    now_number.add(Integer.toString(now_num));
+    count.add(""+mill);
+    note_velocity.add(Integer.toString(note_vel));
+    pitche_bend.add(Integer.toString(notebus_different));
+  }
+    flag = false;
   }
 }
 
@@ -306,7 +321,7 @@ public void keyPressed() {
   //txt\u30d5\u30a1\u30a4\u30eb\u7528
   //\u305d\u308c\u305e\u308c\u306e\u884c\u306b\u6587\u5b57\u5217\u3092\u30d5\u30a1\u30a4\u30eb\u3078\u66f8\u304d\u8fbc\u3080\u3002
   for(int i = 0; i < count.size() ; i++){
-  result.add(note_number.get(i) + "," + now_number.get(i) + "," + count.get(i));
+  result.add(note_number.get(i) + "," + now_number.get(i) + "," + pitche_bend.get(i) + "," + note_velocity.get(i) + "," +count.get(i));
 }
   saveStrings("violin_system_data.txt", (String[])result.toArray(new String[result.size()-1])); 
 }

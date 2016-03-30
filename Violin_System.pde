@@ -25,17 +25,19 @@ ArrayList<String> count = new ArrayList<String>();
 ArrayList<String> note_velocity = new ArrayList<String>();
 ArrayList<String> result = new ArrayList<String>();
 ArrayList<String> pitche_bend = new ArrayList<String>();
-
+ArrayList<String> tab_number = new ArrayList<String>();
 float mill;//時間用
 int note_num;//弾くべき音番号
 int now_num;//今現在弾いている音
 int note_vel;//ベロシティ
+Tab tab_num;
 
 //色を管理する用
 Color []col = new Color[22];//色を22色の配列で管理
 
 //タブを管理するための変数
 Tab tab_true, tab_ambiguous, tab_false;//タブ
+int number = 0;
 
 //webカメラ用
 Capture video;  //Capture型の変数videoを宣言
@@ -149,7 +151,8 @@ void setup() {
   tab_true = new Tab(50, 920);//Tabの正確ver
   tab_ambiguous = new Tab(250, 920);//Tabの曖昧ver
   tab_false = new Tab(450, 920);//Tabの虚偽ver
- 
+  tab_num = new Tab(0, 0);
+
  //midibusを管理
  myBus.sendNoteOn(channel, pitch, velocity); // Send a Midi noteOn
   myBus.sendNoteOff(channel, pitch, velocity); // Send a Midi nodeOff
@@ -277,6 +280,9 @@ if (((int)(data[0] & 0xFF) >= 128)&&((int)(data[0] & 0xFF) <= 131)) {
     count.add(""+mill);
     note_velocity.add(Integer.toString(note_vel));
     pitche_bend.add(Integer.toString(notebus_different));
+    int num = tab_num.getNumber(0);
+    println("num"+num);
+    tab_number.add(Integer.toString(num));
   }
     flag = false;
   }
@@ -298,7 +304,7 @@ void keyPressed() {
   //txtファイル用
   //それぞれの行に文字列をファイルへ書き込む。
   for(int i = 0; i < count.size() ; i++){
-  result.add(note_number.get(i) + "," + now_number.get(i) + "," + pitche_bend.get(i) + "," + note_velocity.get(i) + "," +count.get(i));
+  result.add(note_number.get(i) + "," + now_number.get(i) + "," + pitche_bend.get(i) + "," + note_velocity.get(i) + "," + tab_number.get(i) + "," + count.get(i));
 }
   saveStrings("violin_system_data.txt", (String[])result.toArray(new String[result.size()-1])); 
 }

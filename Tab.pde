@@ -1,7 +1,7 @@
 class Tab{
  private int x;
  private int y;
- public int number = 0;
+ 
  
   Tab(int x, int y){
  	this.x = x;
@@ -61,5 +61,9 @@ public int getY() {
   	number = i;
   }
 }
-
+public int getNumber(int n){
+  n = number;
+  return n;
+}
+ 
 }
